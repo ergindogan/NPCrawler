@@ -4,8 +4,12 @@
 .settings/
 BaseCrawler/bin
 CumhuriyetCrawler/bin
-CumhuriyetCrawler/bin
-CumhuriyetCrawler/binCumhuriyetCrawler/bin
+HurriyetCrawler/bin
+MilliyetCrawler/bin
+SabahCrawler/bin
+SozcuCrawler/bin
+YeniSafakCrawler/bin
+ZamanCrawler/bin
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
