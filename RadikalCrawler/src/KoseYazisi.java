@@ -18,19 +18,16 @@ public class KoseYazisi {
 	private String baslik;
 	private String koseYazisiLink;
 	private String koseYazisi;
-	private int id;
 	
-	private String yazarAdi;
+	private String koseYazariAdi;
 	
 	public KoseYazisi(){
 		
 	}
 	
-	public KoseYazisi(int id, String tarih, String baslik, String koseYazisiLink) throws IOException{
-		setId(id);
-		setTarih(DateUtils.getDate(tarih));
-		setBaslik(baslik);
+	public KoseYazisi(String koseYazisiLink, String koseYazariAdi) throws IOException{
 		setKoseYazisiLink(koseYazisiLink);
+		setKoseYazariAdi(koseYazariAdi);
 		downloadKoseYazisi();
 	}
 
@@ -66,43 +63,43 @@ public class KoseYazisi {
 	}
 
 	public void downloadKoseYazisi() throws IOException {
+		Document doc;
+		
 		try {
-			Document doc = Jsoup.connect(getKoseYazisiLink()).timeout(RADIKAL.timeout).get();
+			doc = Jsoup.connect(getKoseYazisiLink()).timeout(RADIKAL.timeout).get();
 			
-			Element a = doc.select("div#article-body").first();
+			Element headerElement = doc.select("[itemprop=headline]").first();
+			String header = headerElement.text();
 			
-			setKoseYazisi(a.text());
+			Element subHeaderElement = doc.select("[itemprop=articleSection]").first();
+			String subHeader = subHeaderElement.text();
+			
+			Element articleElement = doc.select("[itemprop=articleBody]").first();
+			String article = articleElement.text();
+			
+			Element dateElement = doc.select("[itemprop=datePublished]").first();
+			String dateString = dateElement.text();
+			
+			setBaslik(header);
+			setKoseYazisi(subHeader + "\n" + article);
+			setTarih(DateUtils.getDate(dateString));
+
 		} catch (Exception e) {
 			setKoseYazisi("Read timed out");
 		}
 		
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	@Override
-	public String toString() {
-		return "KoseYazisi [tarih=" + tarih + ", baslik=" + baslik
-				+ ", koseYazisiLink=" + koseYazisiLink + ", koseYazisi="
-				+ koseYazisi + ", id=" + id + "]";
-	}
-
-	public String getYazarAdi() {
-		return yazarAdi;
-	}
-
-	public void setYazarAdi(String yazarAdi) {
-		this.yazarAdi = yazarAdi;
-	}
-
 	public void setKoseYazisi(String koseYazisi) {
 		this.koseYazisi = koseYazisi;
+	}
+
+	public String getKoseYazariAdi() {
+		return koseYazariAdi;
+	}
+
+	public void setKoseYazariAdi(String koseYazariAdi) {
+		this.koseYazariAdi = koseYazariAdi;
 	}
 
 }

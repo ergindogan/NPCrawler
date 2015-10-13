@@ -18,18 +18,12 @@ public class RADIKALFetcher extends PooledMessageWorker {
 	@Override
 	public void run() {
 		
-		
-		for (KoseYazari koseYazari : RADIKAL.yazarlar) {
-			if(koseYazari.getId()%RADIKAL.fetcherCount == id){
-				List<KoseYazisi> koseYazilari = Utils.getKoseYazisi(koseYazari, RADIKAL.sayfaSayisi);
-				
-				for (KoseYazisi koseYazisi : koseYazilari) {
-					System.out.println("Id : " + getId() + " Yazar : " + koseYazisi.getYazarAdi() + " Baslik : " + koseYazisi.getBaslik() + " Date : " + koseYazisi.getTarih());
-					String oneRecord = Utils.getOneRecord(koseYazisi);
-					logger.info(oneRecord);
-					logger.info("------------------------------------------------------------------------------------------ \n");
-				}
-			}
+		List<KoseYazisi> koseYazilari = Utils.getKoseYazisi(RADIKAL.yazarlar.get(id), RADIKAL.sayfaSayisi);
+		for (KoseYazisi koseYazisi : koseYazilari) {
+			System.out.println("Id : " + getId() + " Yazar : " + koseYazisi.getKoseYazariAdi() + " Baslik : " + koseYazisi.getBaslik() + " Date : " + koseYazisi.getTarih());
+			String oneRecord = Utils.getOneRecord(koseYazisi);
+			logger.info(oneRecord);
+			logger.info("------------------------------------------------------------------------------------------ \n");
 		}
 			
 		

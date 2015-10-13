@@ -1,7 +1,14 @@
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -26,31 +33,36 @@ public class Utils {
 		return 0;
 	}
 	
-	public static List<KoseYazari> getKoseYazarlari(){
-		List<KoseYazari> yazarlar = new ArrayList<KoseYazari>();
+	public static Map<Integer,KoseYazari> getKoseYazarlari(){
+		Map<Integer,KoseYazari> yazarlar = new HashMap<Integer,KoseYazari>();
+		int i = 0;
 		Document doc;
 		try {
 			doc = Jsoup.connect("http://www.radikal.com.tr/yazarlar/tum_yazarlar/#kategori").get();
 			
-			Elements links = doc.getElementsByTag("a");
+			Elements links = doc.select("a[href]");
 			
-			//http://www.radikal.com.tr/arama/yazar=ahmet_m%C3%BCmtaz_taylan&siralama=tarihe_gore_azalan/
 			for(Element element:links){
-				String link = element.text();
-				if(link.contains("arama")){
-					link = link.replace(link, "/arama/yazar=");link.replace(link, "&siralama=tarihe_gore_azalan/");
+				String link = element.attr("abs:href");
+				if(link.contains("/arama/yazar")){
+					link = link.replace("http://www.radikal.com.tr/arama/yazar=", "");
+					link = link.replace("&siralama=tarihe_gore_azalan/", "");
 					
-					String yazarAdi = link.replace("_", "-");
-					yazarAdi = yazarAdi.replaceAll("\\W", ""); 
+					String okunurYazarAdi = getOkunurYazarAdi(link);
+					
+					String linkYazarAdi = deAccent(link);
+					if(linkYazarAdi.contains("serdar")){
+						okunurYazarAdi = "M." + okunurYazarAdi;
+						linkYazarAdi = "m" + linkYazarAdi;
+					} else if (linkYazarAdi.contains("therap")){
+						continue;
+					}
+					
+					KoseYazari yazar = new KoseYazari(okunurYazarAdi, linkYazarAdi);
+					yazarlar.put(i, yazar);
+					i++;
 				}
 			}
-			
-			//<div class="authors-list lazy-load push_3">
-			//http://www.radikal.com.tr/index/cengiz-candar/
-//			Element element = doc.select("div.authors-list lazy-load push_3").first();
-//			
-//			Elements links = element.getElementsByTag("a");
-			KoseYazari yazar = new KoseYazari();
 			
 			return yazarlar;
 			
@@ -60,24 +72,62 @@ public class Utils {
 		}
 	}
 	
-	public static List<KoseYazisi> getKoseYazisi(KoseYazari koseYazari, int aySayisi){
+	public static List<KoseYazisi> getKoseYazisi(KoseYazari koseYazari, int sayfaSayisi){
+		Document doc;
 		List<KoseYazisi> koseYazilari = new ArrayList<KoseYazisi>();
-		String linkHref = "";
+		
+		String sayfaLink = koseYazari.getTumYazilariLink().substring(0, koseYazari.getTumYazilariLink().length() - 2);
+		Set<String> tumLinkler = new LinkedHashSet<String>();
+		
+		for(int i = 1; i <= sayfaSayisi; i++){
+			
+			try {
+				doc = Jsoup.connect(sayfaLink + i + "/").timeout(RADIKAL.timeout).get();
+				
+				Elements links = doc.select("a[href]");
+				Set<String> linkler = new LinkedHashSet<String>();
+				
+				for(Element element:links){
+					String link = element.attr("abs:href");
+					
+					if(link.contains(CommonLinks.BASE_URL + "/yazarlar/" + koseYazari.getLinkYazarAdi() + "/")){
+						if(!tumLinkler.contains(link)){
+							tumLinkler.add(link);
+							linkler.add(link);
+						}
+					}
+				}
+				
+				for(String myLink:linkler){
+					KoseYazisi koseYazisi = new KoseYazisi(myLink, koseYazari.getKoseYazariAdi());
+					koseYazilari.add(koseYazisi);
+				}
+				
+			} catch (IOException e) {
+//				e.printStackTrace();
+				System.err.println("Yazar : " + koseYazari.getKoseYazariAdi() + " yazilari cekilemedi...");
+			}
+
+		}
 		
 		return koseYazilari;
 	}
 	
-	private static String getolderUrl(int i, String url, int yazarId){
-		if(i == 1){
-			return url;
-		}else{
-			String[] items = url.split(Integer.toString(yazarId));
-			return items[0] + yazarId + "/" + i + items[1];
-		}
+	public static String getOneRecord(KoseYazisi koseYazisi){
+		return koseYazisi.getKoseYazariAdi() + " - " + koseYazisi.getBaslik() + " - " + koseYazisi.getTarih() + "\n" + koseYazisi.getKoseYazisi() + "\n";
 	}
 	
-	public static String getOneRecord(KoseYazisi koseYazisi){
-		return koseYazisi.getYazarAdi() + " - " + koseYazisi.getBaslik() + " - " + koseYazisi.getTarih() + "\n" + koseYazisi.getKoseYazisi() + "\n";
+	public static String deAccent(String str) {
+	    String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD); 
+	    Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+	    return pattern.matcher(nfdNormalizedString).replaceAll("");
+	}
+	
+	private static String getOkunurYazarAdi(String rawYazarAdi){
+		String okunurYazarAdi = rawYazarAdi.replace("_", " ");
+		okunurYazarAdi = WordUtils.capitalize(okunurYazarAdi);
+		
+		return okunurYazarAdi;
 	}
 
 }
