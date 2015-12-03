@@ -23,7 +23,7 @@ public class TAKVIM {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		OutputController.configureLogger(new File("/Users/ergindoganyildiz/Desktop/MultiThread/TakvimCrawler.txt"), false);
+		OutputController.configureLogger(new File("C:/Users/ergindogan/Desktop/TakvimCrawler.txt"), false);
 		
 		List<TAKVIMFetcher> fetchers = new ArrayList<TAKVIMFetcher>();
 		

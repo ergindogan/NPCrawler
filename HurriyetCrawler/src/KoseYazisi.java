@@ -68,7 +68,7 @@ public class KoseYazisi {
 			
 			Elements contents = doc.select("script[type=text/javascript]");
 			
-			Element content = contents.get(43);
+			Element content = contents.get(44);
 			
 			String wholeText = content.childNode(0).toString();
 			

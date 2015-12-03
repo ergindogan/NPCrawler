@@ -29,7 +29,7 @@ public class Utils {
 			for (Element link : links) {
 				String value = link.attr("value");
 				String linkText = link.text();
-				if(!value.equals("#")){
+				if(!value.equals("#") && !value.isEmpty()){
 					KoseYazari koseYazari = new KoseYazari(Integer.parseInt(value), linkText);
 					yazarlar.add(koseYazari);
 				}

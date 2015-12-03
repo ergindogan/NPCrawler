@@ -62,7 +62,10 @@ public class KoseYazisi {
 	}
 
 	public void downloadKoseYazisi() throws IOException, ParseException {
-		Document doc = Jsoup.connect(getKoseYazisiLink()).timeout(SOZCU.timeout).get();
+		Document doc = Jsoup.connect(getKoseYazisiLink()).timeout(SOZCU.timeout).data("query", "Java")
+				  .userAgent("Mozilla")
+				  .timeout(SOZCU.timeout)
+				  .post();;
 		Element a;
 		Element date;
 		String dateString;

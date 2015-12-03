@@ -15,7 +15,7 @@ import com.i2i.common.utils.threadpool.base.ThreadPool;
  */
 public class RADIKAL {
 	
-	public static int fetcherCount = 49;
+	public static int fetcherCount = 47;
 	public static int sayfaSayisi = 15;
 	public static Map<Integer,KoseYazari> yazarlar = new HashMap<Integer,KoseYazari>();
 	public static int timeout = 30000;

@@ -24,22 +24,24 @@ public class Utils {
 		List<KoseYazari> yazarlar = new ArrayList<KoseYazari>();
 		Document doc;
 		try {
-			doc = Jsoup.connect("http://www.sozcu.com.tr/kategori/yazarlar/").get();
+			doc = Jsoup.connect("http://www.sozcu.com.tr/kategori/yazarlar/").data("query", "Java")
+					  .userAgent("Mozilla")
+					  .timeout(SOZCU.timeout)
+					  .post();;
 			
-			Element content = doc.select("div#left").first();
+			Element content = doc.select("div[class=media-list list cat authors _mbtm30]").first();
 			
-			Elements links = content.getElementsByTag("a");
+			Elements elements = content.select("div[class=item-link _flex _aic]");
 			
-			for (Element link : links) {
-				String linkHref = "";
-				String title = link.attr("title");
+			for (Element element : elements) {
+				Element titleElement = element.select("div[class=item-media]").first();
+				Element tumYazilarElement = element.select("div[class=item-after]").first();
 				
-				if(!title.isEmpty()){
-					linkHref = link.attr("href");
-					KoseYazari koseYazari = new KoseYazari(title, linkHref);
-					yazarlar.add(koseYazari);
-				}
+				String tumYazilar = tumYazilarElement.baseUri() + tumYazilarElement.select("a").first().attr("href");
+				String yazarAdi = titleElement.select("a").first().attr("title");
 				
+				KoseYazari koseYazari = new KoseYazari(yazarAdi, tumYazilar);
+				yazarlar.add(koseYazari);
 			}
 			
 			
@@ -67,7 +69,10 @@ public class Utils {
 			
 			Document doc;
 			try {
-				doc = Jsoup.connect(koseYazari.getKoseYazariLink() + "?ay=" + dateToFetch.get(Calendar.MONTH) + "&Yil=" + dateToFetch.get(Calendar.YEAR) + "&yazi=Yaz%C4%B1lar%C4%B1+Getir").timeout(SOZCU.timeout).get();
+				doc = Jsoup.connect(koseYazari.getKoseYazariLink() + "?ay=" + dateToFetch.get(Calendar.MONTH) + "&Yil=" + dateToFetch.get(Calendar.YEAR) + "&yazi=Yaz%C4%B1lar%C4%B1+Getir").timeout(SOZCU.timeout).data("query", "Java")
+						  .userAgent("Mozilla")
+						  .timeout(SOZCU.timeout)
+						  .post();;
 				
 				Element content = doc.select("div#left").first();
 				if(content != null){

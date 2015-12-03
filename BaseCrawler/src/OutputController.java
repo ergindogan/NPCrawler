@@ -32,6 +32,7 @@ public class OutputController {
 		fa.setLayout(layout);
 		fa.setAppend(true);
 		fa.setDatePattern("'.'yyyy-MM-dd");
+		fa.setEncoding("UTF-8");
 		fa.activateOptions();
 		
 

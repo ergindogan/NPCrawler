@@ -24,7 +24,7 @@ public class POSTA {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		OutputController.configureLogger(new File("/Users/ergindoganyildiz/Desktop/MultiThread/PostaCrawler.txt"), false);
+		OutputController.configureLogger(new File("C:/Users/ergindogan/Desktop/PostaCrawler.txt"), false);
 		
 		List<POSTAFetcher> fetchers = new ArrayList<POSTAFetcher>();
 		
