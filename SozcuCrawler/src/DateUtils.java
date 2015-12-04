@@ -3,22 +3,21 @@ import java.util.Date;
 
 
 /**
- *
  * @author ergindoganyildiz
- *
- *May 18, 2015
+ * 
+ * Oct 14, 2015
  */
 public class DateUtils {
-	
-	private static String[] aylar = {"Ocak","Å�ubat","Mart","Nisan","MayÄ±s","Haziran","Temmuz","AÄŸustos","EylÃ¼l","Ekim","KasÄ±m","AralÄ±k"};
+	private static String[] aylar = {"Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"};
 	
 	public static Date getDate(String dateString){
 		Calendar cal = Calendar.getInstance();
 		
 		String[] items = dateString.split(" ");
 		
-		int dayOfMonth = Integer.parseInt(items[0]);
-		int month = getMonth(items[1]);
+		
+		int month = getMonth(items[0]);
+		int dayOfMonth = Integer.parseInt(items[1].substring(0, items[1].length() - 1));
 		int year = Integer.parseInt(items[2]);
 		
 		cal.set(year, month, dayOfMonth, 0, 0, 0);
@@ -36,5 +35,4 @@ public class DateUtils {
 		}
 		return i;
 	}
-
 }

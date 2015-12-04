@@ -26,10 +26,11 @@ public class KoseYazisi {
 		
 	}
 	
-	public KoseYazisi(String koseYazisiLink, String baslik, String yazarAdi) throws IOException, ParseException{
+	public KoseYazisi(String koseYazisiLink, String baslik, String yazarAdi, String dateString) throws IOException, ParseException{
 		setKoseYazisiLink(koseYazisiLink);
 		setBaslik(baslik);
 		setYazarAdi(yazarAdi);
+		setTarih(DateUtils.getDate(dateString));
 		downloadKoseYazisi();
 	}
 
@@ -65,41 +66,15 @@ public class KoseYazisi {
 		Document doc = Jsoup.connect(getKoseYazisiLink()).timeout(SOZCU.timeout).data("query", "Java")
 				  .userAgent("Mozilla")
 				  .timeout(SOZCU.timeout)
-				  .post();;
-		Element a;
-		Element date;
-		String dateString;
-		Date tarih = null;
+				  .post();
 		
-		a = doc.select("div[class=content]").first();
-		if(a == null){
-			a = doc.select("article[class=hayat-single-post-content-in]").first();
-		}
+		Element content = doc.select("div[itemprop=articleBody]").first();
 		
-		date = doc.select("meta[itemprop=datePublished]").first();
-		if(date == null){
-			date = doc.select("meta[property=article:published_time]").first();
-		}
-		
-		
-		if(date != null && date.attr("content") != null){
-			dateString = date.attr("content");
-			
-			tarih = Utils.parseDate(dateString);
+		if(content != null){
+			setKoseYazisi(content.text());
 		}else{
-			
-			dateString = "Date couldn't found";
-			System.err.println("Date couldn't found for " + yazarAdi + " link : " + koseYazisiLink);
-		}
-		
-		setTarih(tarih);
-		
-		if(a == null){
 			setKoseYazisi("Yazi alinamadi." + getKoseYazisiLink());
-		}else{
-			setKoseYazisi(a.text());
 		}
-		
 	}
 
 	public String getYazarAdi() {

@@ -1,3 +1,4 @@
+package tr.com.ergindogan.stopword.analyser;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;

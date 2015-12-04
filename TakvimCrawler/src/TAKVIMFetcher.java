@@ -27,8 +27,8 @@ public class TAKVIMFetcher extends PooledMessageWorker {
 		List<KoseYazisi> koseYazilari = Utils.getKoseYazisi(TAKVIM.yazarlar.get(id), TAKVIM.sayfaSayisi);
 		for (KoseYazisi koseYazisi : koseYazilari) {
 			String oneRecord = Utils.getOneRecord(koseYazisi);
-			logger.info(oneRecord);
-			logger.info("------------------------------------------------------------------------------------------ \n");
+			logger.warn(oneRecord);
+			logger.warn("------------------------------------------------------------------------------------------ \n");
 			retreivedPassages++;
 		}
 			

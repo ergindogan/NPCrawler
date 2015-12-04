@@ -1,11 +1,20 @@
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicNameValuePair;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -53,49 +62,34 @@ public class Utils {
 
 	}
 	
-	public static List<KoseYazisi> getKoseYazisi(KoseYazari koseYazari, Calendar dateToFetch) {
+	public static List<KoseYazisi> getKoseYazisi(HttpClient httpClient, KoseYazari koseYazari, Calendar dateToFetch) {
 		List<KoseYazisi> koseYazilari = new ArrayList<KoseYazisi>();
-		
-//		Calendar fromDate = Calendar.getInstance();
-//		fromDate.setTime(from);
-//		
-//		Calendar toDate = Calendar.getInstance();
-//		toDate.setTime(to);
-//		
-//		while(fromDate.get(Calendar.YEAR) <= toDate.get(Calendar.YEAR) && fromDate.get(Calendar.MONTH) < toDate.get(Calendar.MONTH)){
-//			
-//			int month = fromDate.get(Calendar.MONTH) + 1;
-//			int year = fromDate.get(Calendar.YEAR);
 			
-			Document doc;
-			try {
-				doc = Jsoup.connect(koseYazari.getKoseYazariLink() + "?ay=" + dateToFetch.get(Calendar.MONTH) + "&Yil=" + dateToFetch.get(Calendar.YEAR) + "&yazi=Yaz%C4%B1lar%C4%B1+Getir").timeout(SOZCU.timeout).data("query", "Java")
-						  .userAgent("Mozilla")
-						  .timeout(SOZCU.timeout)
-						  .post();;
+		Document doc;
+		
+		try {
+			doc = makePostRequest(httpClient, koseYazari.getKoseYazariLink(), dateToFetch.get(Calendar.MONTH), dateToFetch.get(Calendar.YEAR));
+			
+			Element content = doc.select("div[class=popular-news _mbtm20]").first();
+			if(content != null){
+				Elements links = content.select("a[href^=http://www.sozcu.com.tr]");
 				
-				Element content = doc.select("div#left").first();
-				if(content != null){
-					Elements links = content.getElementsByTag("a");
-					
-					for (Element link : links) {
-						String yaziLink = link.attr("href");
-						String title = link.text();
+				for (Element link : links) {
+					String yaziLink = link.attr("href");
+					String title = link.select("div[class=item-text]").first().text();
+					String dateString  = link.select("div[class=txt-date]").first().text();
 						
-						KoseYazisi koseYazisi = new KoseYazisi(yaziLink, title, koseYazari.getKoseYazariAdi());
-						koseYazilari.add(koseYazisi);
-					}
+					KoseYazisi koseYazisi = new KoseYazisi(yaziLink, title, koseYazari.getKoseYazariAdi(), dateString);
+					koseYazilari.add(koseYazisi);
 				}
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ParseException e) {
-				e.printStackTrace();
 			}
 			
-//			fromDate.add(Calendar.MONTH, 1);
-//		}
-		
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+			
 		return koseYazilari;
 	}
 
@@ -103,17 +97,35 @@ public class Utils {
 		return koseYazisi.getYazarAdi() + " - " + koseYazisi.getBaslik() + " - " + koseYazisi.getTarih() + "\n" + koseYazisi.getKoseYazisi() + "\n";
 	}
 	
-	public static Date parseDate(String dateString) throws ParseException{
+	private static Document makePostRequest(HttpClient httpClient, String postUrl, int month, int year) throws ClientProtocolException, IOException{
 		
-		SimpleDateFormat sdf;
-		
-		if(!dateString.contains("T")){
-			sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		}else{
-			sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+		HttpPost httppost = new HttpPost(postUrl);
+		Document doc = null;
+
+		// Request parameters and other properties.
+		List<NameValuePair> params = new ArrayList<NameValuePair>(2);
+		params.add(new BasicNameValuePair("months",Integer.toString(month)));
+		params.add(new BasicNameValuePair("years", Integer.toString(year)));
+		params.add(new BasicNameValuePair("send", "Getir"));
+		httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+
+		//Execute and get the response.
+		HttpResponse response = httpClient.execute(httppost);
+		HttpEntity entity = response.getEntity();
+
+		if (entity != null) {
+		    InputStream instream = entity.getContent();
+		    try {
+		    	StringWriter writer = new StringWriter();
+		    	IOUtils.copy(instream, writer, "UTF-8");
+		    	String theString = writer.toString();
+		    	
+		    	doc = Jsoup.parse(theString);
+		    } finally {
+		        instream.close();
+		    }
 		}
-		
-		return sdf.parse(dateString);
+		return doc;
 	}
 
 }

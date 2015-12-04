@@ -1,3 +1,4 @@
+package tr.com.ergindogan.stopword.analyser;
 
 /**
  * @author ergindoganyildiz

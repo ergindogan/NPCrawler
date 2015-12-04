@@ -1,3 +1,4 @@
+package tr.com.ergindogan.stopword.analyser;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;

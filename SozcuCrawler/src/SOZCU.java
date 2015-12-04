@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClients;
+
 import com.i2i.common.utils.threadpool.base.ThreadPool;
 
 
@@ -26,7 +29,9 @@ public class SOZCU {
 		from.set(2012, 0, 1,0,0,0);
 		to.set(2015, 0, 1,0,0,0);
 		
-		OutputController.configureLogger(new File("C:/Users/ergindogan/Desktop/SozcuCrawler.txt"), false);
+		OutputController.configureLogger(new File("/Users/ergindoganyildiz/Desktop/SozcuCrawler.txt"), false);
+		
+		HttpClient httpclient = HttpClients.createDefault();
 		
 		List<SOZCUFetcher> fetchers = new ArrayList<SOZCUFetcher>();
 		
@@ -34,7 +39,7 @@ public class SOZCU {
 		
 		for (int id = 1; id < (fetcherCount * (to.get(Calendar.YEAR) - from.get(Calendar.YEAR))) + 1; id++) {
 			try {
-				SOZCUFetcher fetcher = new SOZCUFetcher(id);
+				SOZCUFetcher fetcher = new SOZCUFetcher(id, httpclient);
 				fetchers.add(fetcher);
 			} catch (Throwable e) {
 				e.printStackTrace();

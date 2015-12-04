@@ -1,3 +1,4 @@
+package tr.com.ergindogan.stopword.analyser;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -18,7 +18,7 @@ public class OutputController {
 			throw new RuntimeException("Log path is configured for an invalid path! Path :" + path.getAbsolutePath());
 		}
 
-		Level lLevel = Level.ALL;
+		Level lLevel = Level.WARN;
 
 		LogManager.resetConfiguration();
 

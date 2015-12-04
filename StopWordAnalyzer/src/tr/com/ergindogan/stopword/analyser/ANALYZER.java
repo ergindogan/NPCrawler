@@ -1,3 +1,4 @@
+package tr.com.ergindogan.stopword.analyser;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,7 +42,7 @@ public class ANALYZER {
 		BaseAnalyser.HMM_DISAMBIGUATION = hmmDisambiguation;
 		BaseAnalyser.FSM = fsm;
 		
-		File folderToAnalyse = new File("/Users/ergindoganyildiz/Desktop/MultiThread");
+		File folderToAnalyse = new File("/Users/ergindoganyildiz/Desktop/StopWords");
 		FilenameFilter myFileter = new FilenameFilter() {
 			
 			@Override
