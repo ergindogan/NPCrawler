@@ -1,4 +1,4 @@
-package tr.com.ergindogan.stopword.reader;
+package tr.com.ergindogan.stopword.reader.stopword;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -6,17 +6,17 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 
+import tr.com.ergindogan.stopword.reader.BaseReader;
+
 /**
  * @author ergindoganyildiz
  * 
  * Dec 4, 2015
  */
-public class StopWordReader {
-	
-	private File fileToRead;
+public class StopWordReader extends BaseReader{
 	
 	public StopWordReader(File fileToRead){
-		setFileToRead(fileToRead);
+		super(fileToRead);
 	}
 	
 	public LinkedHashMap<String, Integer> readFileToMap(){
@@ -54,14 +54,6 @@ public class StopWordReader {
 		System.out.println("File successfully read to map...");
 		
 		return myWordMap;
-	}
-
-	public File getFileToRead() {
-		return fileToRead;
-	}
-
-	private void setFileToRead(File fileToRead) {
-		this.fileToRead = fileToRead;
 	}
 
 }

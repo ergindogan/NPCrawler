@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import tr.com.ergindogan.stopword.reader.passage.Passage;
 import Corpus.Sentence;
 import Corpus.TurkishSplitter;
 import MorphologicalAnalysis.Parse;
@@ -39,7 +40,7 @@ public class FileAnalyser extends BaseAnalyser implements Runnable{
 
 			String sCurrentLine;
 			int i = 0;
-			Record myRecord = new Record();
+			Passage myRecord = new Passage();
 			TurkishSplitter ts = new TurkishSplitter();
 
 //			Reader reader = new InputStreamReader(new FileInputStream(getFileToAnalyse().getAbsolutePath()), "windows-1254");
@@ -69,7 +70,7 @@ public class FileAnalyser extends BaseAnalyser implements Runnable{
 							increasePROCESSED_SENTENCE_COUNT();
 						}
 					}
-					myRecord = new Record();
+					myRecord = new Passage();
 				}
 				i++;
 			}

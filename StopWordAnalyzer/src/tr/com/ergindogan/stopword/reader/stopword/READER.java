@@ -1,4 +1,4 @@
-package tr.com.ergindogan.stopword.reader;
+package tr.com.ergindogan.stopword.reader.stopword;
 
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -14,7 +14,7 @@ public class READER {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		File myFrequencyFile = new File("/Users/ergindoganyildiz/Desktop/StopWords/sakla/wordFrequency_83911.txt");
+		File myFrequencyFile = new File("/Users/ergindoganyildiz/Desktop/StopWords/wordFrequency.txt");
 		
 		StopWordReader stopWordReader = new StopWordReader(myFrequencyFile);
 		LinkedHashMap<String, Integer> myWordMap = stopWordReader.readFileToMap();
