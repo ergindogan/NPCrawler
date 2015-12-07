@@ -18,7 +18,7 @@ public class CLASSIFY {
 	 */
 	public static void main(String[] args) {
 		
-		int dataSize = 1007;
+		int dataSize = 190;
 		
 		List<Passage> passages = new ArrayList<Passage>();
 		

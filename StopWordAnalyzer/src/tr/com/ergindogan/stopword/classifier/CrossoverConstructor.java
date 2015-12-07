@@ -2,7 +2,6 @@ package tr.com.ergindogan.stopword.classifier;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import tr.com.ergindogan.stopword.reader.passage.Passage;
 
@@ -41,29 +40,22 @@ public class CrossoverConstructor {
 		List<Integer> lastTestItemIndexes;
 		List<Integer> lastTrainItemIndexes;
 		
-		int mainIterationTestSize = (getItemList().size() * getTestRatio()) / (getTrainRatio() + getTestRatio());
+		int mainIterationTestSize = getItemList().size() / getTestRatio();
 		
+		int mainIterationTrainSize = getItemList().size() - mainIterationTestSize;
 		
-		int mainIterationTrainSize = (mainIterationTestSize * getTrainRatio()) / getTestRatio();
-		
-		int mainIterationCount = getItemList().size() / mainIterationTestSize;
+		int mainIterationCount = getTestRatio();
 		
 		
 		int lastIterationTestSize = getItemList().size() % getTestRatio();
 		
-		int lastIterationTrainSize = (lastIterationTestSize * getTrainRatio()) / getTestRatio();
+		int lastIterationTrainSize = getItemList().size() - lastIterationTestSize;
 		
 		//Main iteration loop
 		for(int i = 0; i < mainIterationCount; i++){
-			if(isRandom()){
-				testItemIndexes = getTestItemIndexesRandom(mainIterationTestSize);
-				
-				trainItemIndexes = getTrainItemIndexesRandom(mainIterationTrainSize, testItemIndexes);
-			}else{
-				testItemIndexes = getTestItemIndexes(mainIterationTestSize);
-				
-				trainItemIndexes = getTrainItemIndexes(mainIterationTrainSize, testItemIndexes);
-			}
+			testItemIndexes = getTestItemIndexes(mainIterationTestSize);
+			
+			trainItemIndexes = getTrainItemIndexes(mainIterationTrainSize, testItemIndexes);
 			
 			//print each iteration.
 			System.out.println("--------------------------------------------------------------------");
@@ -73,15 +65,9 @@ public class CrossoverConstructor {
 		
 		//Last iteration if any.
 		if(lastIterationTestSize != 0 && !allPickedForTest()){
-			if(isRandom()){
-				lastTestItemIndexes = getTestItemIndexesRandom(lastIterationTestSize);
-				
-				lastTrainItemIndexes = getTrainItemIndexesRandom(lastIterationTrainSize, lastTestItemIndexes);
-			}else{
-				lastTestItemIndexes = getTestItemIndexes(lastIterationTestSize);
-				
-				lastTrainItemIndexes = getTrainItemIndexes(lastIterationTrainSize, lastTestItemIndexes);
-			}
+			lastTestItemIndexes = getTestItemIndexes(lastIterationTestSize);
+			
+			lastTrainItemIndexes = getTrainItemIndexes(lastIterationTrainSize, lastTestItemIndexes);
 			
 			//print iteration.
 			System.out.println("--------------------------------------------------------------------");
@@ -131,29 +117,29 @@ public class CrossoverConstructor {
 		return testItems;
 	}
 	
-	private List<Integer> getTestItemIndexesRandom(int testItemCount){
-		List<Integer> testItems = new ArrayList<Integer>();
-		Random rand = new Random();
-		
-		List<Integer> tempIndexList = new ArrayList<Integer>();
-		
-		for(CrossoverItem item : getItemList()){
-			if(!item.isPickedForTesting()){
-				tempIndexList.add(getItemList().indexOf(item));
-			}
-		}
-		
-		for(int i = 0; i < testItemCount; i++){
-			int randomNumber = rand.nextInt(tempIndexList.size());
-			
-			CrossoverItem item = getItemList().get(tempIndexList.get(randomNumber));
-			setPickedForTesting(item);
-			testItems.add(tempIndexList.get(randomNumber));
-			
-		}
-		
-		return testItems;
-	}
+//	private List<Integer> getTestItemIndexesRandom(int testItemCount){
+//		List<Integer> testItems = new ArrayList<Integer>();
+//		Random rand = new Random();
+//		
+//		List<Integer> tempIndexList = new ArrayList<Integer>();
+//		
+//		for(CrossoverItem item : getItemList()){
+//			if(!item.isPickedForTesting()){
+//				tempIndexList.add(getItemList().indexOf(item));
+//			}
+//		}
+//		
+//		for(int i = 0; i < testItemCount; i++){
+//			int randomNumber = rand.nextInt(tempIndexList.size());
+//			
+//			CrossoverItem item = getItemList().get(tempIndexList.get(randomNumber));
+//			setPickedForTesting(item);
+//			testItems.add(tempIndexList.get(randomNumber));
+//			
+//		}
+//		
+//		return testItems;
+//	}
 	
 	private List<Integer> getTrainItemIndexes(int trainItemCount, List<Integer> testItemIndexes){
 		int addedItemCounter = 0;
@@ -174,28 +160,28 @@ public class CrossoverConstructor {
 		return trainItems;
 	}
 	
-	private List<Integer> getTrainItemIndexesRandom(int trainItemCount, List<Integer> testItemIndexes){
-		List<Integer> trainItems = new ArrayList<Integer>();
-		Random rand = new Random();
-		
-		List<Integer> tempIndexList = new ArrayList<Integer>();
-		
-		for(CrossoverItem item : getItemList()){
-			if(!testItemIndexes.contains(getItemList().indexOf(item))){
-				tempIndexList.add(getItemList().indexOf(item));
-			}
-		}
-		
-		for(int i = 0; i < trainItemCount; i++){
-			int randomNumber = rand.nextInt(tempIndexList.size());
-			
-			trainItems.add(tempIndexList.get(randomNumber));
-			tempIndexList.remove(randomNumber);
-			
-		}
-		
-		return trainItems;
-	}
+//	private List<Integer> getTrainItemIndexesRandom(int trainItemCount, List<Integer> testItemIndexes){
+//		List<Integer> trainItems = new ArrayList<Integer>();
+//		Random rand = new Random();
+//		
+//		List<Integer> tempIndexList = new ArrayList<Integer>();
+//		
+//		for(CrossoverItem item : getItemList()){
+//			if(!testItemIndexes.contains(getItemList().indexOf(item))){
+//				tempIndexList.add(getItemList().indexOf(item));
+//			}
+//		}
+//		
+//		for(int i = 0; i < trainItemCount; i++){
+//			int randomNumber = rand.nextInt(tempIndexList.size());
+//			
+//			trainItems.add(tempIndexList.get(randomNumber));
+//			tempIndexList.remove(randomNumber);
+//			
+//		}
+//		
+//		return trainItems;
+//	}
 
 	public List<CrossoverItem> getItemList() {
 		return itemList;
