@@ -81,7 +81,7 @@ public class KoseYazisi {
 			String dateString = dateElement.text();
 			
 			setBaslik(header);
-			setKoseYazisi(subHeader + "\n" + article);
+			setKoseYazisi(subHeader + " " + article);
 			setTarih(DateUtils.getDate(dateString));
 
 		} catch (Exception e) {
