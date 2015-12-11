@@ -24,7 +24,6 @@ public class PassageReader extends BaseReader{
 	
 	public Map<String,List<Passage>> readPassagesIntoMap(){
 		BufferedReader br = null;
-		int i = 0;
 		
 		List<Passage> myPassageList;
 		Map<String,List<Passage>> passageMap = new HashMap<String,List<Passage>>();
@@ -33,15 +32,25 @@ public class PassageReader extends BaseReader{
 
 			String sCurrentLine;
 			Passage passage = new Passage();
+			String myRecord = "";
 
 			br = new BufferedReader(new FileReader(getFileToRead().getAbsolutePath()));
 
 			while ((sCurrentLine = br.readLine()) != null) {
-				if(i % 5 == 0){
-					passage.setWriterNameHeadlineDate(sCurrentLine);
-				}else if(i % 5 == 1){
-					passage.setPassage(sCurrentLine);
-				}else if(i % 5 == 4){
+				if(sCurrentLine.trim().equals(CONSTANTS.SEPERATOR)){
+					//Record is complete
+					String parts[] = myRecord.split("__________");
+					parts = removeEmptyElements(parts);
+					
+					if(parts.length == 0){
+						//No record found to add.
+						myRecord = "";
+						continue;
+					}
+					
+					passage.setWriterNameHeadlineDate(parts[0]);
+					passage.setPassage(getPassage(parts));
+					
 					if(passageMap.containsKey(passage.getAuthor())){
 						passageMap.get(passage.getAuthor()).add(passage);
 					}else{
@@ -55,8 +64,11 @@ public class PassageReader extends BaseReader{
 						}
 					}
 					passage = new Passage();
+					
+					myRecord = "";
+				}else{
+					myRecord = myRecord + sCurrentLine.trim() +  "__________";
 				}
-				i++;
 			}
 			
 		} catch (IOException e) {
@@ -72,6 +84,25 @@ public class PassageReader extends BaseReader{
 		}
 		
 		return passageMap;
+	}
+	
+	private String getPassage(String parts[]){
+		String passage = "";
+		for(int i = 1; i < parts.length; i++){
+			passage += parts[i] + " ";
+		}
+		passage = passage.trim();
+		return passage;
+	}
+	
+	private String[] removeEmptyElements(String parts[]){
+		List<String> elements = new ArrayList<String>();
+		for(int i = 0; i < parts.length; i++){
+			if(!parts[i].isEmpty()){
+				elements.add(parts[i]);
+			}
+		}
+		return elements.toArray(new String[elements.size()]);
 	}
 
 }
