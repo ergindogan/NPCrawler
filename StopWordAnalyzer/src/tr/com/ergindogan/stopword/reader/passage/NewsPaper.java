@@ -7,10 +7,8 @@ package tr.com.ergindogan.stopword.reader.passage;
  */
 public enum NewsPaper {
 	CUMHURIYET,
-	HURRIYET,
 	MILLIYET,
 	POSTA,
-	RADIKAL,
 	SABAH,
 	SOZCU,
 	TAKVIM,
