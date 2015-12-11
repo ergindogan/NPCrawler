@@ -25,7 +25,7 @@ public class HURRIYETFetcher extends PooledMessageWorker {
 			for (KoseYazisi koseYazisi : koseYazilari) {
 				System.out.println("Id : " + getId() + " Yazar : " + koseYazisi.getYazarAdi() + " Baslik : " + koseYazisi.getBaslik() + " Date : " + koseYazisi.getTarih());
 				String oneRecord = Utils.getOneRecord(koseYazisi);
-				logger.warn("\n" + oneRecord);
+				logger.warn(oneRecord);
 				logger.warn("------------------------------------------------------------------------------------------ \n");
 			}
 			
