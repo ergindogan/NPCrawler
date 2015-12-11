@@ -86,7 +86,7 @@ public class KoseYazisi {
 		}
 		
 		if(content != null && content2 != null){
-			koseYazisi = content.text() + "\n" + content2.text();
+			koseYazisi = content.text() + " " + content2.text();
 		}
 		
 		setKoseYazisi(koseYazisi);
