@@ -10,12 +10,12 @@ import java.util.Map;
  * Dec 4, 2015
  */
 public class READER {
-
+	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		File fileToRead = new File("/Users/ergindoganyildiz/Desktop/StopWords/CumhuriyetCrawler.txt");
+		File fileToRead = new File("/Users/ergindoganyildiz/Desktop/LoadTest/SozcuCrawler.txt");
 		
 		PassageReader passageReader = new PassageReader(fileToRead);
 		Map<String,List<Passage>> myMap = passageReader.readPassagesIntoMap();
