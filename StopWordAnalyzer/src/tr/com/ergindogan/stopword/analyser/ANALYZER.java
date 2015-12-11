@@ -1,81 +1,101 @@
 package tr.com.ergindogan.stopword.analyser;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import Dictionary.TurkishWordComparator;
-import Dictionary.TxtDictionary;
-import MorphologicalAnalysis.FsmMorphologicalAnalyzer;
-import MorphologicalDisambiguation.HmmDisambiguation;
-
+import tr.com.ergindogan.stopword.loader.NewsPaperLoader;
+import tr.com.ergindogan.stopword.reader.passage.NewsPaper;
+import tr.com.ergindogan.stopword.reader.passage.Passage;
+import Corpus.Sentence;
+import Corpus.TurkishSplitter;
+import Dictionary.Word;
 
 /**
  * @author ergindoganyildiz
  * 
- * Dec 3, 2015
+ * Dec 10, 2015
  */
 public class ANALYZER {
+	
+	private static Map<String, Integer> WORD_MAP = new HashMap<String, Integer>();
+	
+	private static final String[] punctuations = {".", ",", "’", "”", "“", "*", "?",
+			"\"", "!", "'", "-", ":", ";", ")",
+			"(", " ", "/", "\n", "ı", "\n\n", "  " };
 
 	/**
 	 * @param args
-	 * @throws InterruptedException 
 	 */
-	public static void main(String[] args) throws InterruptedException {
-		//Initialize HmmDiambiguator
-		HmmDisambiguation hmmDisambiguation = new HmmDisambiguation();
-		hmmDisambiguation.loadModel();
+	public static void main(String[] args) {
+		File folderToLoad = new File("/Users/ergindoganyildiz/Desktop/Loadtest");
 		
-		FsmMorphologicalAnalyzer fsm = new FsmMorphologicalAnalyzer("/Users/ergindoganyildiz/Documents/thesis/nlptoolkit/turkish_finite_state_machine.xml", 
-				new TxtDictionary("/Users/ergindoganyildiz/Documents/thesis/nlptoolkit/turkish_dictionary.txt", 
-						new TurkishWordComparator()));
+		NewsPaperLoader loader = new NewsPaperLoader(folderToLoad);
+		Map<NewsPaper,Map<String,List<Passage>>> myMap = loader.loadData();
 		
-		BaseAnalyser.HMM_DISAMBIGUATION = hmmDisambiguation;
-		BaseAnalyser.FSM = fsm;
+		System.out.println("");
 		
-		File folderToAnalyse = new File("/Users/ergindoganyildiz/Desktop/StopWords");
-		FilenameFilter myFileter = new FilenameFilter() {
-			
-			@Override
-			public boolean accept(File dir, String name) {
-				if(name.contains("Crawler")){
-					return true;
-				}else{
-					return false;
+		System.out.println("StopWord work Started!");
+		long startTime = System.currentTimeMillis();
+		
+		TurkishSplitter ts = new TurkishSplitter();
+		
+		for(NewsPaper newsPaper : NewsPaper.values()){
+			if(myMap.containsKey(newsPaper)){
+				Map<String,List<Passage>> authorMap = myMap.get(newsPaper);
+				for(String authorName : authorMap.keySet()){
+					List<Passage> passages = authorMap.get(authorName);
+					for(Passage passage:passages){
+						List<Sentence> sentenceList = ts.split(passage.getPassage());
+						
+						for (Sentence sentence : sentenceList) {
+							
+							for(Word word:sentence.getWords()){
+								addToMap(word.toString());
+							}
+						}
+					}
 				}
 			}
-		};
-		
-		//Start fileAnalysers.
-		for(File fileToAnalyse:folderToAnalyse.listFiles(myFileter)){
-			FileAnalyser myAnalayser = new FileAnalyser(fileToAnalyse);
-			new Thread(myAnalayser).start();
 		}
 		
-		//Check if analyse has finished.
-		while(true){
-			if(BaseAnalyser.isFINISHED_ANALYSING()){
-				System.out.println("Analyse finished! Writing results to file.");
-				//Analyse finished. Write results to a file.
-//				writeResultsToFile(folderToAnalyse.getAbsolutePath() + File.separator + "wordFrequency.txt");
-				break;
+		long endTime   = System.currentTimeMillis();
+		System.out.println("StopWord work Finished!");
+		
+		long totalTime = endTime - startTime;
+		System.out.println("It took " + totalTime + " miliseconds find stopWords!");
+		
+		writeResultsToFile(folderToLoad.getAbsolutePath() + File.separator + "wordFrequency.txt");
+		
+	}
+	
+	private static void addToMap(String word){
+		if(!isPunctuation(word)){
+			if(!WORD_MAP.containsKey(word)){
+				WORD_MAP.put(word, 1);
 			}else{
-				System.out.println("Processed sentence count : " + BaseAnalyser.getPROCESSED_SENTENCE_COUNT());
-				if(BaseAnalyser.getPROCESSED_SENTENCE_COUNT() % 10 == 0){
-					writeResultsToFile(folderToAnalyse.getAbsolutePath() + File.separator + "wordFrequency.txt");
-				}
+				WORD_MAP.put(word, WORD_MAP.get(word) + 1);
 			}
-			Thread.sleep(1000);
 		}
+	}
+	
+	private static boolean isPunctuation(String word){
+		for(int i = 0; i < punctuations.length; i++){
+			if(word.equals(punctuations[i])){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private static void writeResultsToFile(String filePath){
@@ -83,9 +103,9 @@ public class ANALYZER {
 
 		try {
 		    writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath), "UTF-8"));
-		    Map<String, Integer> mySortedMap = sortByValue(BaseAnalyser.getWordMap());
+		    Map<String, Integer> mySortedMap = sortByValue(WORD_MAP);
 		    for(String key:mySortedMap.keySet()){
-		    	Integer value = BaseAnalyser.getWordMap().get(key);
+		    	Integer value = WORD_MAP.get(key);
 			       
 		    	writer.write(key + " __ " + value + "\n");
 		    }
