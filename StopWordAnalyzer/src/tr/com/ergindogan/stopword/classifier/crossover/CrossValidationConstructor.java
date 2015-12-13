@@ -11,9 +11,9 @@ import tr.com.ergindogan.stopword.classifier.feature.FeatureVector;
  * 
  * Dec 6, 2015
  */
-public class CrossoverConstructor {
+public class CrossValidationConstructor {
 	
-	private List<CrossoverItem> itemList;
+	private List<CrossValidationItem> itemList;
 	
 	private int trainRatio;
 	private int testRatio;
@@ -21,11 +21,11 @@ public class CrossoverConstructor {
 	private boolean random;
 	
 	
-	public CrossoverConstructor(List<FeatureVector> vectorList, int trainRatio, int testRatio, boolean random){
-		itemList = new ArrayList<CrossoverItem>();
+	public CrossValidationConstructor(List<FeatureVector> vectorList, int trainRatio, int testRatio, boolean random){
+		itemList = new ArrayList<CrossValidationItem>();
 		
 		for(FeatureVector vector : vectorList){
-			CrossoverItem crossoverItem = new CrossoverItem(vector);
+			CrossValidationItem crossoverItem = new CrossValidationItem(vector);
 			itemList.add(crossoverItem);
 		}
 		
@@ -126,7 +126,7 @@ public class CrossoverConstructor {
 		
 		List<Integer> tempIndexList = new ArrayList<Integer>();
 		
-		for(CrossoverItem item : getItemList()){
+		for(CrossValidationItem item : getItemList()){
 			if(!item.isPickedForTesting()){
 				tempIndexList.add(getItemList().indexOf(item));
 			}
@@ -135,7 +135,7 @@ public class CrossoverConstructor {
 		for(int i = 0; i < testItemCount; i++){
 			int randomNumber = rand.nextInt(tempIndexList.size());
 			
-			CrossoverItem item = getItemList().get(tempIndexList.get(randomNumber));
+			CrossValidationItem item = getItemList().get(tempIndexList.get(randomNumber));
 			setPickedForTesting(item);
 			testItems.add(tempIndexList.get(randomNumber));
 			
@@ -149,7 +149,7 @@ public class CrossoverConstructor {
 		
 		List<Integer> trainItems = new ArrayList<Integer>();
 		
-		for(CrossoverItem item : getItemList()){
+		for(CrossValidationItem item : getItemList()){
 			if(!testItemIndexes.contains(getItemList().indexOf(item))){
 				if(addedItemCounter >= trainItemCount){
 					break;
@@ -186,11 +186,11 @@ public class CrossoverConstructor {
 //		return trainItems;
 //	}
 
-	public List<CrossoverItem> getItemList() {
+	public List<CrossValidationItem> getItemList() {
 		return itemList;
 	}
 
-	public void setItemList(List<CrossoverItem> itemList) {
+	public void setItemList(List<CrossValidationItem> itemList) {
 		this.itemList = itemList;
 	}
 
@@ -210,7 +210,7 @@ public class CrossoverConstructor {
 		this.testRatio = testRatio;
 	}
 
-	private void setPickedForTesting(CrossoverItem item){
+	private void setPickedForTesting(CrossValidationItem item){
 		int index = getItemList().indexOf(item);
 		
 		if(index != -1){
@@ -220,7 +220,7 @@ public class CrossoverConstructor {
 	}
 	
 	private boolean allPickedForTest(){
-		for(CrossoverItem item:getItemList()){
+		for(CrossValidationItem item:getItemList()){
 			if(!item.isPickedForTesting()){
 				return false;
 			}

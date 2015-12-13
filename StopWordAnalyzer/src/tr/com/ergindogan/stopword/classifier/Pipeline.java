@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import tr.com.ergindogan.stopword.classifier.crossover.CrossoverType;
+import tr.com.ergindogan.stopword.classifier.crossover.CrossValidationType;
 import tr.com.ergindogan.stopword.classifier.feature.Feature;
 import tr.com.ergindogan.stopword.classifier.feature.VocublaryExtendFeature;
 import tr.com.ergindogan.stopword.classifier.feature.WordCountFeature;
@@ -29,7 +29,7 @@ public class Pipeline {
 		DistinctAuthorLoader loader = new DistinctAuthorLoader(folderToLoad);
 		
 		//Burada yazarlarin en az 100 yazisi ve tam 100 ile bolunur sayida yazisini myMap icine koyduk.
-		Map<String,List<Passage>> myMap = loader.loadAndSelectQualifiedAuthors(CrossoverType._90_10);
+		Map<String,List<Passage>> myMap = loader.loadAndSelectQualifiedAuthors(CrossValidationType._90_10);
 		
 		//Add features to feature list.
 		List<Feature> features = new ArrayList<Feature>();

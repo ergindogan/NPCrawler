@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import tr.com.ergindogan.stopword.classifier.crossover.CrossoverConstructor;
+import tr.com.ergindogan.stopword.classifier.crossover.CrossValidationConstructor;
 import tr.com.ergindogan.stopword.classifier.crossover.Iteration;
 import tr.com.ergindogan.stopword.classifier.feature.Feature;
 import tr.com.ergindogan.stopword.classifier.feature.FeatureVector;
@@ -40,7 +40,7 @@ public class NBClassifier {
 	public void classify(){
 		TestResult result;
 		
-		CrossoverConstructor crossoverConstructor;
+		CrossValidationConstructor crossoverConstructor;
 		Map<String,List<Iteration>> allIterations = new HashMap<String,List<Iteration>>();
 		
 		Map<String,List<FeatureVector>> trainMap = new HashMap<String,List<FeatureVector>>();
@@ -55,7 +55,7 @@ public class NBClassifier {
 		for(String authorName : getFeatureVectorsToClassify().keySet()){
 			//burada her bir loop her bir yazarin butun train test ikililerini dondurucek.
 			List<FeatureVector> featureVectorList = getFeatureVectorsToClassify().get(authorName);
-			crossoverConstructor = new CrossoverConstructor(featureVectorList, getTrainRatio(), getTestRatio(), false);
+			crossoverConstructor = new CrossValidationConstructor(featureVectorList, getTrainRatio(), getTestRatio(), false);
 			
 			List<Iteration> iterationsForAuthor = crossoverConstructor.constructIterations();
 			allIterations.put(authorName, iterationsForAuthor);

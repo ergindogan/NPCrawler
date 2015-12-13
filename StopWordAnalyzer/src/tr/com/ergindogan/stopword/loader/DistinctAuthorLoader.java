@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import tr.com.ergindogan.stopword.classifier.crossover.CrossoverType;
+import tr.com.ergindogan.stopword.classifier.crossover.CrossValidationType;
 import tr.com.ergindogan.stopword.reader.BaseReader;
 import tr.com.ergindogan.stopword.reader.passage.NewsPaper;
 import tr.com.ergindogan.stopword.reader.passage.Passage;
@@ -28,12 +28,12 @@ public class DistinctAuthorLoader extends BaseReader {
 		super(fileToRead);
 	}
 	
-	public Map<String,List<Passage>> loadAndSelectQualifiedAuthors(CrossoverType type){
+	public Map<String,List<Passage>> loadAndSelectQualifiedAuthors(CrossValidationType type){
 		List<Passage> tempList = new ArrayList<Passage>();
 		Map<String,List<Passage>> qualifiedAuthorMap = new HashMap<String,List<Passage>>();
 		int dividor = 0;
 		
-		if(type == CrossoverType._90_10){
+		if(type == CrossValidationType._90_10){
 			dividor = 100;
 		}
 		

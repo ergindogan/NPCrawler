@@ -5,7 +5,7 @@ package tr.com.ergindogan.stopword.classifier.crossover;
  * 
  * Dec 11, 2015
  */
-public enum CrossoverType {
+public enum CrossValidationType {
 	
 	_90_10,
 

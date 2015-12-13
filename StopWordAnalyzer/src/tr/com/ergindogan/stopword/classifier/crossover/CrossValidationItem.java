@@ -7,13 +7,13 @@ import tr.com.ergindogan.stopword.classifier.feature.FeatureVector;
  * 
  * Dec 6, 2015
  */
-public class CrossoverItem {
+public class CrossValidationItem {
 	
 	private FeatureVector vector;
 	private boolean tested;
 	private boolean pickedForTesting;
 	
-	public CrossoverItem(FeatureVector vector){
+	public CrossValidationItem(FeatureVector vector){
 		setVector(vector);
 		setTested(false);
 		setPickedForTesting(false);
