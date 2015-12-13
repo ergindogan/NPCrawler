@@ -7,8 +7,8 @@ package tr.com.ergindogan.stopword.classifier.test;
  */
 public class TestResult {
 	
-	private int correctGuessCounter;
-	private int falseGuessCounter;
+	private double correctGuessCounter;
+	private double falseGuessCounter;
 	
 	public TestResult(){
 		setCorrectGuessCounter(0);
@@ -19,27 +19,27 @@ public class TestResult {
 		return getCorrectGuessCounter() / (getCorrectGuessCounter() + getFalseGuessCounter());
 	}
 	
-	public void increaseCorrectGuessCounter(int i){
+	public void increaseCorrectGuessCounter(double i){
 		setCorrectGuessCounter(getCorrectGuessCounter() + i);
 	}
 	
-	public void increaseFalseGuessCounter(int i){
+	public void increaseFalseGuessCounter(double i){
 		setFalseGuessCounter(getFalseGuessCounter() + i);
 	}
 
-	public int getCorrectGuessCounter() {
+	public double getCorrectGuessCounter() {
 		return correctGuessCounter;
 	}
 
-	private void setCorrectGuessCounter(int correctGuessCounter) {
+	private void setCorrectGuessCounter(double correctGuessCounter) {
 		this.correctGuessCounter = correctGuessCounter;
 	}
 
-	public int getFalseGuessCounter() {
+	public double getFalseGuessCounter() {
 		return falseGuessCounter;
 	}
 
-	private void setFalseGuessCounter(int falseGuessCounter) {
+	private void setFalseGuessCounter(double falseGuessCounter) {
 		this.falseGuessCounter = falseGuessCounter;
 	}
 

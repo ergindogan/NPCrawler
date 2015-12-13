@@ -46,9 +46,9 @@ public class DistinctAuthorLoader extends BaseReader {
 				for(int i = 0; i < passagesToSelect; i++){
 					tempList.add(passages.get(i));
 				}
+				qualifiedAuthorMap.put(authorName, tempList);
+				tempList = new ArrayList<Passage>();
 			}
-			qualifiedAuthorMap.put(authorName, tempList);
-			tempList = new ArrayList<Passage>();
 		}
 		
 		return qualifiedAuthorMap;

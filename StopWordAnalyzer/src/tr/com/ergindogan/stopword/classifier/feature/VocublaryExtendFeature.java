@@ -24,7 +24,7 @@ public class VocublaryExtendFeature extends Feature{
 	 */
 	@Override
 	public double extractFeatureResult(String passage) {
-		int totalWordCount = 0;
+		double totalWordCount = 0;
 		Set<String> distinctWords = new HashSet<String>();
 		List<Sentence> wordList = splitPassageIntoSentences(passage);
 		

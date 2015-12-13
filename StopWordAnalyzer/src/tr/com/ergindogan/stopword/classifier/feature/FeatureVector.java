@@ -13,8 +13,12 @@ public class FeatureVector {
 	private Vector<Double> vector;
 	
 	public FeatureVector(List<Feature> features, String passage){
+		setVector(new Vector<Double>(features.size()));
 		for(Feature feature : features){
 			double value = feature.extractFeatureResult(passage);
+			if(Double.isNaN(value)){
+				System.out.println("NAN!");
+			}
 			addToVector(value);
 		}
 	}

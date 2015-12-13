@@ -1,5 +1,6 @@
 package tr.com.ergindogan.stopword.classifier.train;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -25,6 +26,8 @@ public class Trainer {
 	public Trainer(Map<String,List<FeatureVector>> authorFeatureVectorMap, List<Feature> features){
 		setAuthorFeatureVectorMap(authorFeatureVectorMap);
 		setFeatures(features);
+		setMeanVector(new HashMap<String, Vector<Double>>());
+		setStandartDeviationVector(new HashMap<String, Vector<Double>>());
 	}
 
 	public void train(){
@@ -41,12 +44,12 @@ public class Trainer {
 	}
 	
 	private Vector<Double> calculateMeanVetor(List<FeatureVector> featureVectors){
-		Vector<Double> meanVector = new Vector<Double>();
+		Vector<Double> meanVector = new Vector<Double>(getFeatures().size());
 		
-		int size = featureVectors.size();
+		double size = featureVectors.size();
 		int featureSize = getFeatures().size();
 		
-		double sum = 0.0;
+		Double sum = 0.0;
 		
 		for(int i = 0; i < featureSize; i++){
 			for(FeatureVector featureVector : featureVectors){
@@ -61,7 +64,7 @@ public class Trainer {
 	}
 	
 	private Vector<Double> calculateStandartDeviationVector(List<FeatureVector> featureVectors, String authorName){
-		Vector<Double> standartDeviationVector = new Vector<Double>();
+		Vector<Double> standartDeviationVector = new Vector<Double>(getFeatures().size());
 		
 		int size = featureVectors.size();
 		int featureSize = getFeatures().size();
@@ -73,7 +76,7 @@ public class Trainer {
 				double value = featureVector.getVector().get(i);
 				sum = sum + Math.pow((value - getMeanVector().get(authorName).get(i)), 2);
 			}
-			standartDeviationVector.add(i, Math.sqrt(sum/size - 1));
+			standartDeviationVector.add(i, Math.sqrt(sum/(size - 1)));
 			sum = 0.0;
 		}
 		
@@ -121,13 +124,22 @@ public class Trainer {
 		return getAuthorFeatureVectorMap().get(authorName).size();
 	}
 
-	private int getTotalVectors(){
-		int counter = 0;
+	private double getTotalVectors(){
+		double counter = 0;
 		
 		for(String authorName : getAuthorFeatureVectorMap().keySet()){
 			counter = counter + getAuthorFeatureVectorMap().get(authorName).size();
 		}
 		
 		return counter;
+	}
+
+	private void setMeanVector(Map<String, Vector<Double>> meanVector) {
+		this.meanVector = meanVector;
+	}
+
+	private void setStandartDeviationVector(
+			Map<String, Vector<Double>> standartDeviationVector) {
+		this.standartDeviationVector = standartDeviationVector;
 	}
 }

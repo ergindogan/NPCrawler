@@ -29,10 +29,11 @@ public class NBClassifier {
 	private TestResult finalResult;
 
 	public NBClassifier(Map<String,List<Passage>> myMap, List<Feature> features, int trainRatio, int testRatio){
-		setFeatureVectorsToClassify(myMap);
 		setFeatures(features);
 		setTrainRatio(trainRatio);
 		setTestRatio(testRatio);
+		setFeatureVectorsToClassify(myMap);
+		setFinalResult(new TestResult());
 	}
 	
 	//We are assuming all authors have same amount of iterations.
@@ -63,10 +64,11 @@ public class NBClassifier {
 		
 		//With final iteration indexes now we can construct each iterations author-feature vectors.
 		for(int i = 0; i < iterationCount; i++){
-			trainFeatureVectorList = new ArrayList<FeatureVector>();
-			testFeatureVectorList = new ArrayList<FeatureVector>();
 			
 			for(String authorName : allIterations.keySet()){
+				trainFeatureVectorList = new ArrayList<FeatureVector>();
+				testFeatureVectorList = new ArrayList<FeatureVector>();
+				
 				List<Iteration> iterations = allIterations.get(authorName);
 				Iteration currentIterationToAdd = iterations.get(i);
 				
@@ -94,18 +96,19 @@ public class NBClassifier {
 			
 			//add mid results to the final result.
 			addMidResultsToFinalResult(result);
+			System.out.println("Iteration " + i + " correct : " + result.getCorrectGuessCounter() + " false : " + result.getFalseGuessCounter());
 			
 			//reinitialize maps after each iteration.
 			trainMap = new HashMap<String,List<FeatureVector>>();
 			testMap = new HashMap<String,List<FeatureVector>>();
 		}
 		
-		System.out.println("Classification success rate : " + finalResult.getSuccessRate());
+		System.out.println("Classification success rate : " + getFinalResult().getSuccessRate());
 	}
 	
 	private void addMidResultsToFinalResult(TestResult testResult){
-		finalResult.increaseCorrectGuessCounter(testResult.getCorrectGuessCounter());
-		finalResult.increaseFalseGuessCounter(testResult.getFalseGuessCounter());
+		getFinalResult().increaseCorrectGuessCounter(testResult.getCorrectGuessCounter());
+		getFinalResult().increaseFalseGuessCounter(testResult.getFalseGuessCounter());
 	}
 
 	public List<Feature> getFeatures() {
@@ -126,6 +129,9 @@ public class NBClassifier {
 	}
 	
 	private Map<String,List<FeatureVector>> getAuthorFeatureVectorMap(Map<String,List<Passage>> myMap, List<Feature> features){
+		System.out.println("Feature Extraction Started!");
+		long startTime = System.currentTimeMillis();
+		
 		Map<String,List<FeatureVector>> featureVectorMap = new HashMap<String,List<FeatureVector>>();
 		List<FeatureVector> tempFeatureList;
 		
@@ -134,11 +140,19 @@ public class NBClassifier {
 			tempFeatureList = new ArrayList<FeatureVector>();
 			
 			for(Passage passage : passages){
-				FeatureVector featureVector = new FeatureVector(features, passage.getPassage());
-				tempFeatureList.add(featureVector);
+				if(!passage.getPassage().isEmpty()){
+					FeatureVector featureVector = new FeatureVector(features, passage.getPassage());
+					tempFeatureList.add(featureVector);
+				}
 			}
 			featureVectorMap.put(authorName, tempFeatureList);
 		}
+		
+		long endTime   = System.currentTimeMillis();
+		System.out.println("Feature Extraction Finished!");
+		
+		long totalTime = endTime - startTime;
+		System.out.println("It took " + totalTime + " miliseconds to extract features.");
 		
 		return featureVectorMap;
 	}
@@ -157,6 +171,14 @@ public class NBClassifier {
 
 	public void setTestRatio(int testRatio) {
 		this.testRatio = testRatio;
+	}
+
+	public TestResult getFinalResult() {
+		return finalResult;
+	}
+
+	public void setFinalResult(TestResult finalResult) {
+		this.finalResult = finalResult;
 	}
 	
 }
