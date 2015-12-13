@@ -104,6 +104,24 @@ public class NBClassifier {
 		}
 		
 		System.out.println("Classification success rate : " + getFinalResult().getSuccessRate());
+		
+//		printResultMatrix();
+	}
+	
+	
+	private void printResultMatrix(){
+		for(String authorName : getFeatureVectorsToClassify().keySet()){
+			Map<String,Integer> guesses = Tester.choices.get(authorName);
+			String guessesString = "";
+			for(String guessAuthorName : getFeatureVectorsToClassify().keySet()){
+				if(!guesses.containsKey(guessAuthorName)){
+					guessesString = guessesString + 0 + " ";
+				}else{
+					guessesString = guessesString + guesses.get(guessAuthorName) + " ";
+				}
+			}
+			System.out.println(authorName + " : " + guessesString);
+		}
 	}
 	
 	private void addMidResultsToFinalResult(TestResult testResult){

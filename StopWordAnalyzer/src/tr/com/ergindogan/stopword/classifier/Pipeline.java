@@ -23,7 +23,7 @@ public class Pipeline {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		File folderToLoad = new File("C:/Users/ergindogan/Desktop/Loadtest");
+		File folderToLoad = new File("/Users/ergindoganyildiz/Desktop/Loadtest");
 		
 		//Load data...
 		DistinctAuthorLoader loader = new DistinctAuthorLoader(folderToLoad);

@@ -17,6 +17,8 @@ public class Tester {
 	private Map<String,List<FeatureVector>> testMap;
 	private Trainer trainer;
 	
+	public static Map<String,Map<String,Integer>> choices = new HashMap<String, Map<String,Integer>>();
+	
 	public Tester(Map<String,List<FeatureVector>> testMap, Trainer trainer){
 		setTestMap(testMap);
 		setTrainer(trainer);
@@ -26,6 +28,8 @@ public class Tester {
 		TestResult testResult = new TestResult();
 		
 		Map<String,Double> probabilityMap;
+		
+		Map<String,Integer> guesses;
 		
 		for(String testAuthorName:getTestMap().keySet()){
 			List<FeatureVector> authorsVectorList = getTestMap().get(testAuthorName);
@@ -42,6 +46,20 @@ public class Tester {
 				
 				//Map icindeki en buyuk olasiliga sahip keyi testAuthorName ile karsilastiricaz.
 				String guessedAuthorName = getAuthorNameOfHighestProbability(probabilityMap);
+				
+				if(choices.get(testAuthorName) == null){
+					guesses = new HashMap<String, Integer>();
+					guesses.put(guessedAuthorName, 1);
+				}else{
+					guesses = choices.get(testAuthorName);
+					if(guesses.get(guessedAuthorName) == null){
+						guesses.put(guessedAuthorName, 1);
+					}else{
+						guesses.put(guessedAuthorName, guesses.get(guessedAuthorName) + 1);
+					}
+				}
+				choices.put(testAuthorName, guesses);
+				
 				if(testAuthorName.equals(guessedAuthorName)){
 					testResult.increaseCorrectGuessCounter(1);
 				}else{
