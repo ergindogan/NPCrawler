@@ -28,26 +28,54 @@ public class DistinctAuthorLoader extends BaseReader {
 		super(fileToRead);
 	}
 	
-	public Map<String,List<Passage>> loadAndSelectQualifiedAuthors(CrossValidationType type){
+	//We have to ignore passages that has a title named null. Because these passages couldn't fetched and their
+	//body equals to Read time out.
+	public Map<String,List<Passage>> loadAndSelectQualifiedAuthors(CrossValidationType type, int topPassageCount){
 		List<Passage> tempList = new ArrayList<Passage>();
+		List<Passage> finalTempList = new ArrayList<Passage>();
+		
 		Map<String,List<Passage>> qualifiedAuthorMap = new HashMap<String,List<Passage>>();
 		int dividor = 0;
+		int passageAdded = 0;
 		
 		if(type == CrossValidationType._90_10){
-			dividor = 100;
+			dividor = 10;
 		}
 		
 		Map<String,List<Passage>> distinctAuthorMap = loadData();
 		
 		for(String authorName : distinctAuthorMap.keySet()){
 			List<Passage> passages = distinctAuthorMap.get(authorName);
-			if(passages.size() > dividor){
+			if(passages.size() >= dividor){
 				int passagesToSelect = passages.size() - (passages.size() % dividor);
-				for(int i = 0; i < passagesToSelect; i++){
-					tempList.add(passages.get(i));
+				if(topPassageCount > 0 && topPassageCount % 10 == 0 && passagesToSelect >= topPassageCount){
+					passagesToSelect = topPassageCount;
 				}
-				qualifiedAuthorMap.put(authorName, tempList);
+				for(int i = 0; i < passages.size(); i++){
+					if(!passages.get(i).getTitle().equals("null")){
+						if(passageAdded == passagesToSelect){
+							break;
+						}else{
+							tempList.add(passages.get(i));
+							passageAdded++;
+						}
+					}
+				}
+				if(tempList.size() >= dividor){
+					int finalPassagesToSelect = 0;
+					if(tempList.size() % dividor != 0){
+						finalPassagesToSelect = tempList.size() - (tempList.size() % dividor);
+						for(int i = 0; i < finalPassagesToSelect; i++){
+							finalTempList.add(tempList.get(i));
+						}
+						qualifiedAuthorMap.put(authorName, finalTempList);
+					}else{
+						qualifiedAuthorMap.put(authorName, tempList);
+					}
+				}
+				finalTempList = new ArrayList<Passage>();
 				tempList = new ArrayList<Passage>();
+				passageAdded = 0;
 			}
 		}
 		
