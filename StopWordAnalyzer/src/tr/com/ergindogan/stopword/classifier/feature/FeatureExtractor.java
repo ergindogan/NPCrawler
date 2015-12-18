@@ -20,7 +20,7 @@ public class FeatureExtractor {
 	}
 	
 	public FeatureVector extractFeatureVector(){
-		FeatureVector featureVector = new FeatureVector(getFeatures(), getPassage().getPassage());
+		FeatureVector featureVector = new FeatureVector(getFeatures(), getPassage().getPassage(), getPassage().getParagraphs());
 		return featureVector;
 	}
 

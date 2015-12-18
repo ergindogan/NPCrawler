@@ -1,6 +1,8 @@
 package tr.com.ergindogan.stopword.classifier.feature;
 
 
+
+
 /**
  * @author ergindoganyildiz
  * 
@@ -9,4 +11,5 @@ package tr.com.ergindogan.stopword.classifier.feature;
 public interface FeatureExtructable {
 
 	double extractFeatureResult(String passage);
+	
 }

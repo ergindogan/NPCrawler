@@ -3,6 +3,7 @@ package tr.com.ergindogan.stopword.reader.passage;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author ergindoganyildiz
@@ -15,6 +16,8 @@ public class Passage {
 	private String title;
 	private Date publishDate;
 	private String passage;
+	
+	private List<String> paragraphs;
 	
 	/**
 	 * @param author
@@ -92,5 +95,13 @@ public class Passage {
 			return null;
 		}
 		return myDate;
+	}
+
+	public List<String> getParagraphs() {
+		return paragraphs;
+	}
+
+	public void setParagraphs(List<String> paragraphs) {
+		this.paragraphs = paragraphs;
 	}
 }

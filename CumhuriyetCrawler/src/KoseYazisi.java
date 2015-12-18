@@ -77,7 +77,8 @@ public class KoseYazisi {
 			
 			Element a = doc.select("div#article-body").first();
 			
-			Elements elements = a.select("p");
+			Elements elements = a.getElementsByTag("p");
+			
 			
 			for(Element el:elements){
 				paragraphs.add(el.text());

@@ -16,7 +16,11 @@ public class ParagraphExtension {
 		
 		if(!paragraphs.isEmpty()){
 			for(int i = 0; i < paragraphs.size(); i++){
-				text = text + paragraphs.get(i) + delimeter;
+				String paragraph = paragraphs.get(i);
+				
+				if(!paragraph.startsWith("*") && !paragraph.isEmpty()){
+					text = text + paragraph + delimeter;
+				}
 			}
 			
 			text = text.substring(0, text.length() - delimeter.length());
@@ -36,7 +40,7 @@ public class ParagraphExtension {
 		
 		System.out.println();
 		
-		System.out.println(getParagraphString(paragraphs, passage1).split(delimeter)[1]);
+		System.out.println(getParagraphString(paragraphs, passage1).split(delimeter)[0]);
 	}
 
 }

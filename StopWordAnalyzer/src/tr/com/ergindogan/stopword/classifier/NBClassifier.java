@@ -159,7 +159,7 @@ public class NBClassifier {
 			
 			for(Passage passage : passages){
 				if(!passage.getPassage().isEmpty()){
-					FeatureVector featureVector = new FeatureVector(features, passage.getPassage());
+					FeatureVector featureVector = new FeatureVector(features, passage.getPassage(), passage.getParagraphs());
 					tempFeatureList.add(featureVector);
 				}
 			}

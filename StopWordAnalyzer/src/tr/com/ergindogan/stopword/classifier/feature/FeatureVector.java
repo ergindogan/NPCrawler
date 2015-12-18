@@ -12,10 +12,16 @@ public class FeatureVector {
 	
 	private Vector<Double> vector;
 	
-	public FeatureVector(List<Feature> features, String passage){
+	public FeatureVector(List<Feature> features, String passage, List<String> paragraphs){
+		double value = 0.0;
 		setVector(new Vector<Double>(features.size()));
 		for(Feature feature : features){
-			double value = feature.extractFeatureResult(passage);
+			if(feature instanceof AvarageParagraphLengthFeature){
+				AvarageParagraphLengthFeature myFeature = (AvarageParagraphLengthFeature) feature;
+				value = myFeature.extractFeatureResult(paragraphs);
+			}else{
+				value = feature.extractFeatureResult(passage);
+			}
 			if(Double.isNaN(value)){
 				System.out.println("NAN!");
 			}

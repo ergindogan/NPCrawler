@@ -8,4 +8,6 @@ package tr.com.ergindogan.stopword.reader.passage;
 public final class CONSTANTS {
 
 	public static final String SEPERATOR = "------------------------------------------------------------------------------------------";
+	
+	public static final String RECORD_PART_SEPERATOR = "__________";
 }
