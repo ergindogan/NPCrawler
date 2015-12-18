@@ -1,5 +1,7 @@
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,6 +18,8 @@ public class KoseYazisi {
 	private String baslik;
 	private String koseYazisiLink;
 	private String koseYazisi;
+	
+	private List<String> paragraphs;
 	
 	private String koseYazariAdi;
 	
@@ -64,6 +68,7 @@ public class KoseYazisi {
 		Document doc;
 		
 		try {
+			setParagraphs(new ArrayList<String>());
 			doc = Jsoup.connect(getKoseYazisiLink()).timeout(POSTA.timeout).get();
 			
 			Element titleElement = doc.select("head[id=Head1]").first();
@@ -76,6 +81,10 @@ public class KoseYazisi {
 			String titleText = titleElement.select("title").text();
 			String dateText = dateElementChild.text();
 			String contentText = contentChild.text();
+			
+			for(Element el:contentChild.select("p")){
+				getParagraphs().add(el.text());
+			}
 			
 			setTarih(DateUtils.getDate(dateText));
 			setBaslik(titleText);
@@ -97,6 +106,14 @@ public class KoseYazisi {
 
 	public void setKoseYazariAdi(String koseYazariAdi) {
 		this.koseYazariAdi = koseYazariAdi;
+	}
+
+	public List<String> getParagraphs() {
+		return paragraphs;
+	}
+
+	public void setParagraphs(List<String> paragraphs) {
+		this.paragraphs = paragraphs;
 	}
 
 }

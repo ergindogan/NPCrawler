@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -21,6 +23,7 @@ public class KoseYazisi {
 	private String koseYazisi;
 	private String yazarAdi;
 	
+	private List<String> paragraphs;
 	
 	public KoseYazisi(){
 		
@@ -62,6 +65,7 @@ public class KoseYazisi {
 	}
 
 	public void downloadKoseYazisi() throws IOException, ParseException {
+		setParagraphs(new ArrayList<String>());
 		Document doc;
 		Date contentDate = null;
 		
@@ -76,6 +80,13 @@ public class KoseYazisi {
 		Element content = doc.select(".detaySpot").first();
 		
 		Element content2 = doc.select("span[itemprop=articleBody]").first();
+		
+		for(Element el:content.select("p")){
+			getParagraphs().add(el.text());
+		}
+		for(Element el2:content2.select("p")){
+			getParagraphs().add(el2.text());
+		}
 		
 		Element date = doc.select("meta[itemprop=datePublished]").first();
 		
@@ -110,6 +121,14 @@ public class KoseYazisi {
 		return "KoseYazisi [tarih=" + tarih + ", baslik=" + baslik
 				+ ", koseYazisiLink=" + koseYazisiLink + ", koseYazisi="
 				+ koseYazisi + ", yazarAdi=" + yazarAdi + "]";
+	}
+
+	public List<String> getParagraphs() {
+		return paragraphs;
+	}
+
+	public void setParagraphs(List<String> paragraphs) {
+		this.paragraphs = paragraphs;
 	}
 
 }

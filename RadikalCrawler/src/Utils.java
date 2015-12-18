@@ -114,7 +114,7 @@ public class Utils {
 	}
 	
 	public static String getOneRecord(KoseYazisi koseYazisi){
-		return koseYazisi.getKoseYazariAdi() + " - " + koseYazisi.getBaslik() + " - " + koseYazisi.getTarih() + "\n" + koseYazisi.getKoseYazisi() + "\n";
+		return koseYazisi.getKoseYazariAdi() + " - " + koseYazisi.getBaslik() + " - " + koseYazisi.getTarih() + "\n" + ParagraphExtension.getParagraphString(koseYazisi.getParagraphs(), koseYazisi.getKoseYazisi()) + "\n";
 	}
 	
 	public static String deAccent(String str) {

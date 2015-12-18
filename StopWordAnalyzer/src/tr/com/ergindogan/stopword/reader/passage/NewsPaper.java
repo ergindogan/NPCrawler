@@ -16,5 +16,7 @@ public enum NewsPaper {
 	TAKVIM,
 	YENISAFAK,
 	ZAMAN,
+	LOMBAK,
+	PENGUEN,
 	UNDEFINED
 }

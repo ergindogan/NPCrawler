@@ -1,5 +1,7 @@
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,6 +20,8 @@ public class KoseYazisi {
 	private String baslik;
 	private String koseYazisiLink;
 	private String koseYazisi;
+	
+	private List<String> paragraphs;
 	
 	private String koseYazariAdi;
 	
@@ -66,6 +70,7 @@ public class KoseYazisi {
 		Document doc;
 		
 		try {
+			setParagraphs(new ArrayList<String>());
 			doc = Jsoup.connect(getKoseYazisiLink()).timeout(RADIKAL.timeout).get();
 			
 			Element headerElement = doc.select("[itemprop=headline]").first();
@@ -79,6 +84,10 @@ public class KoseYazisi {
 			
 			Element dateElement = doc.select("[itemprop=datePublished]").first();
 			String dateString = dateElement.text();
+			
+			for(Element el:articleElement.select("p")){
+				getParagraphs().add(el.text());
+			}
 			
 			setBaslik(header);
 			setKoseYazisi(subHeader + " " + article);
@@ -100,6 +109,14 @@ public class KoseYazisi {
 
 	public void setKoseYazariAdi(String koseYazariAdi) {
 		this.koseYazariAdi = koseYazariAdi;
+	}
+
+	public List<String> getParagraphs() {
+		return paragraphs;
+	}
+
+	public void setParagraphs(List<String> paragraphs) {
+		this.paragraphs = paragraphs;
 	}
 
 }

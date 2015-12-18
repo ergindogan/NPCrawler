@@ -94,7 +94,7 @@ public class Utils {
 	}
 
 	public static String getOneRecord(KoseYazisi koseYazisi){
-		return koseYazisi.getYazarAdi() + " - " + koseYazisi.getBaslik() + " - " + koseYazisi.getTarih() + "\n" + koseYazisi.getKoseYazisi() + "\n";
+		return koseYazisi.getYazarAdi() + " - " + koseYazisi.getBaslik() + " - " + koseYazisi.getTarih() + "\n" + ParagraphExtension.getParagraphString(koseYazisi.getParagraphs(), koseYazisi.getKoseYazisi()) + "\n";
 	}
 	
 	private static Document makePostRequest(HttpClient httpClient, String postUrl, int month, int year) throws ClientProtocolException, IOException{

@@ -105,7 +105,7 @@ public class NBClassifier {
 		
 		System.out.println("Classification success rate : " + getFinalResult().getSuccessRate());
 		
-//		printResultMatrix();
+		printResultMatrix();
 	}
 	
 	

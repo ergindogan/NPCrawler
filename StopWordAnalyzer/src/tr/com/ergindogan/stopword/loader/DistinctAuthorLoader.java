@@ -34,6 +34,8 @@ public class DistinctAuthorLoader extends BaseReader {
 		List<Passage> tempList = new ArrayList<Passage>();
 		List<Passage> finalTempList = new ArrayList<Passage>();
 		
+		int yazarSayisi = 0;
+		
 		Map<String,List<Passage>> qualifiedAuthorMap = new HashMap<String,List<Passage>>();
 		int dividor = 0;
 		int passageAdded = 0;
@@ -69,13 +71,18 @@ public class DistinctAuthorLoader extends BaseReader {
 							finalTempList.add(tempList.get(i));
 						}
 						qualifiedAuthorMap.put(authorName, finalTempList);
+						yazarSayisi++;
 					}else{
 						qualifiedAuthorMap.put(authorName, tempList);
+						yazarSayisi++;
 					}
 				}
 				finalTempList = new ArrayList<Passage>();
 				tempList = new ArrayList<Passage>();
 				passageAdded = 0;
+			}
+			if(yazarSayisi == 10){
+				break;
 			}
 		}
 		
