@@ -79,7 +79,6 @@ public class KoseYazisi {
 			
 			Elements elements = a.getElementsByTag("p");
 			
-			
 			for(Element el:elements){
 				paragraphs.add(el.text());
 			}
@@ -88,7 +87,6 @@ public class KoseYazisi {
 		} catch (Exception e) {
 			setKoseYazisi("Read timed out");
 		}
-		
 	}
 
 	public int getId() {
