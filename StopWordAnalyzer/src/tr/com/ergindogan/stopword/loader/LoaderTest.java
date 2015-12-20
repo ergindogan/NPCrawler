@@ -11,7 +11,7 @@ import tr.com.ergindogan.stopword.reader.passage.Passage;
  * 
  * Dec 4, 2015
  */
-public class LOADER {
+public class LoaderTest {
 
 	/**
 	 * @param args
