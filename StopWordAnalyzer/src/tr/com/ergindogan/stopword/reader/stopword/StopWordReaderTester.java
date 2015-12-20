@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
  * 
  * Dec 4, 2015
  */
-public class READER {
+public class StopWordReaderTester {
 
 	/**
 	 * @param args

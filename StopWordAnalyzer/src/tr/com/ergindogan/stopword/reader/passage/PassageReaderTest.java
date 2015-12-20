@@ -9,7 +9,7 @@ import java.util.Map;
  * 
  * Dec 4, 2015
  */
-public class READER {
+public class PassageReaderTest {
 	
 	/**
 	 * @param args
