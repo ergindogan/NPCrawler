@@ -80,7 +80,7 @@ public class KoseYazisi {
 			}
 			setKoseYazisi(content.text());
 		}else{
-			setKoseYazisi("Yazi alinamadi." + getKoseYazisiLink());
+			setKoseYazisi("Read timed out");
 		}
 	}
 

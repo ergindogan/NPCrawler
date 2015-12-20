@@ -68,17 +68,23 @@ public class KoseYazisi {
 	}
 
 	public void downloadKoseYazisi() throws IOException, ParseException {
-		setParagraphs(new ArrayList<String>());
-		Document doc;
-		doc = Jsoup.connect(getKoseYazisiLink()).timeout(10000).get();
-		
-		Element content = doc.select("#contextual").first();
-		
-		for(Element el:content.select("p")){
-			getParagraphs().add(el.text());
+		Element content = null;
+		try {
+			setParagraphs(new ArrayList<String>());
+			Document doc;
+			doc = Jsoup.connect(getKoseYazisiLink()).timeout(10000).get();
+			
+			content = doc.select("#contextual").first();
+			
+			for(Element el:content.select("p")){
+				getParagraphs().add(el.text());
+			}
+			
+			setKoseYazisi(content.text());
+		} catch (Exception e) {
+			setKoseYazisi("Read timed out");
 		}
 		
-		setKoseYazisi(content.text());
 	}
 
 	public String getYazarAdi() {

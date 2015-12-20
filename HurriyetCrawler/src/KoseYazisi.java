@@ -94,7 +94,7 @@ public class KoseYazisi {
 			
 			setTarih(DateUtils.getTarih(date, getKoseYazisiLink()));
 		} catch (Exception e) {
-			setKoseYazisi("Couldn't fetched!");
+			setKoseYazisi("Read timed out");
 			
 			setTarih(null);
 		}

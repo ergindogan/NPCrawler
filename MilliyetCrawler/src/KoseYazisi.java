@@ -103,7 +103,7 @@ public class KoseYazisi {
 		setBaslik(baslik);
 		
 		if(a == null){
-			setKoseYazisi("Yazi alinamadi." + getKoseYazisiLink());
+			setKoseYazisi("Read timed out");
 		}else{
 			for(Element el:a.select("p")){
 				getParagraphs().add(el.text());

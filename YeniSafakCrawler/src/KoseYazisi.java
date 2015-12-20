@@ -84,7 +84,7 @@ public class KoseYazisi {
 			
 			setKoseYazisi(text);
 		} catch (Exception e) {
-			setKoseYazisi(e.getMessage());
+			setKoseYazisi("Read timed out");
 		}
 		
 	}

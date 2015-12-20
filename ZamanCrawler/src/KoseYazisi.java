@@ -65,43 +65,47 @@ public class KoseYazisi {
 	}
 
 	public void downloadKoseYazisi() throws IOException, ParseException {
-		setParagraphs(new ArrayList<String>());
-		Document doc;
-		Date contentDate = null;
-		
-		String koseYazisi = "Content couldn't fetched!";
-		
-		doc = Jsoup.connect(getKoseYazisiLink())
-				.data("query", "Java")
-				  .userAgent("Mozilla")
-				  .timeout(ZAMAN.timeout)
-				  .post();
-		
-		Element content = doc.select(".detaySpot").first();
-		
-		Element content2 = doc.select("span[itemprop=articleBody]").first();
-		
-		for(Element el:content.select("p")){
-			getParagraphs().add(el.text());
+		try {
+			setParagraphs(new ArrayList<String>());
+			Document doc;
+			Date contentDate = null;
+			
+			String koseYazisi = "Read timed out";
+			
+			doc = Jsoup.connect(getKoseYazisiLink())
+					.data("query", "Java")
+					  .userAgent("Mozilla")
+					  .timeout(ZAMAN.timeout)
+					  .post();
+			
+			Element content = doc.select(".detaySpot").first();
+			
+			Element content2 = doc.select("span[itemprop=articleBody]").first();
+			
+			for(Element el:content.select("p")){
+				getParagraphs().add(el.text());
+			}
+			for(Element el2:content2.select("p")){
+				getParagraphs().add(el2.text());
+			}
+			
+			Element date = doc.select("meta[itemprop=datePublished]").first();
+			
+			if(date != null){
+				contentDate = Utils.parseDate(date.attr("content"));
+			}else{
+				System.err.println("Date couldn't fetched for yazar : " + getYazarAdi() + " Yazi link : " + getKoseYazisiLink());
+			}
+			
+			if(content != null && content2 != null){
+				koseYazisi = content.text() + " " + content2.text();
+			}
+			
+			setKoseYazisi(koseYazisi);
+			setTarih(contentDate);
+		} catch (Exception e) {
+			setKoseYazisi("Read timed out");
 		}
-		for(Element el2:content2.select("p")){
-			getParagraphs().add(el2.text());
-		}
-		
-		Element date = doc.select("meta[itemprop=datePublished]").first();
-		
-		if(date != null){
-			contentDate = Utils.parseDate(date.attr("content"));
-		}else{
-			System.err.println("Date couldn't fetched for yazar : " + getYazarAdi() + " Yazi link : " + getKoseYazisiLink());
-		}
-		
-		if(content != null && content2 != null){
-			koseYazisi = content.text() + " " + content2.text();
-		}
-		
-		setKoseYazisi(koseYazisi);
-		setTarih(contentDate);
 	}
 
 	public String getYazarAdi() {
