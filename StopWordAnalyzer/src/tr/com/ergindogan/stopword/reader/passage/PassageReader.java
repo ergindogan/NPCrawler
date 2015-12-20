@@ -59,7 +59,7 @@ public class PassageReader extends BaseReader{
 					}
 					passage.setPassage(myPassageString);
 					
-					if(myPassageString.contains("Read timed out") 
+					if(myPassageString.isEmpty() || myPassageString.contains("Read timed out") 
 							|| myPassageString.contains("HTTP error fetching URL") 
 							|| myPassageString.contains("Yazi alinamadi.")){
 						myRecord = "";
