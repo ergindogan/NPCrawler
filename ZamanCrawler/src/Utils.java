@@ -23,19 +23,22 @@ public class Utils {
 	public static List<KoseYazari> getKoseYazarlari(){
 		List<KoseYazari> yazarlar = new ArrayList<KoseYazari>();
 		Document doc;
+		String [] items;
 		try {
-			doc = Jsoup.connect("http://www.zaman.com.tr/search.action").data("query", "Java")
+			doc = Jsoup.connect("http://www.zaman.com.tr/yazarlar").data("query", "Java")
 					  .userAgent("Mozilla")
 					  .cookie("auth", "token")
 					  .timeout(ZAMAN.timeout)
 					  .post();
 			
-			Element content = doc.select("#columnistSuggestionBox").first();
+			Element content = doc.select("div[class=tumYazarRight span6 wrapHeight]").first();
 			
-			Elements elements = content.getAllElements();
+			Elements elements = content.select("a");
 			
 			for (Element element : elements) {
-				String idString = element.attr("value");
+				items = element.attr("href").split("/");
+				
+				String idString = items[items.length - 1];
 				String koseYazariAdi = element.text();
 				
 				if(!idString.isEmpty()){

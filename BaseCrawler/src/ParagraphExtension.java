@@ -23,7 +23,10 @@ public class ParagraphExtension {
 				}
 			}
 			
-			text = text.substring(0, text.length() - delimeter.length());
+			if(!text.isEmpty()){
+				text = text.substring(0, text.length() - delimeter.length());
+			}
+			
 		}else{
 			text = passage;
 		}

@@ -71,7 +71,7 @@ public class KoseYazisi {
 
 	public void downloadKoseYazisi() throws IOException {
 		try {
-			paragraphs = new ArrayList<String>();
+			setParagraphs(new ArrayList<String>());
 			
 			Document doc = Jsoup.connect(getKoseYazisiLink()).timeout(CUMHURIYET.timeout).get();
 			
@@ -80,7 +80,7 @@ public class KoseYazisi {
 			Elements elements = a.getElementsByTag("p");
 			
 			for(Element el:elements){
-				paragraphs.add(el.text());
+				getParagraphs().add(el.text());
 			}
 			
 			setKoseYazisi(a.text());
