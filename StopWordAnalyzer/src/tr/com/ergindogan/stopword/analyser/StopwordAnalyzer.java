@@ -26,7 +26,7 @@ import Dictionary.Word;
  * 
  * Dec 10, 2015
  */
-public class ANALYZER {
+public class StopwordAnalyzer {
 	
 	private static Map<String, Integer> WORD_MAP = new HashMap<String, Integer>();
 	
