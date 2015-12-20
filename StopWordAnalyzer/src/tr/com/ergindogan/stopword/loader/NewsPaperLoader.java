@@ -25,7 +25,7 @@ public class NewsPaperLoader extends BaseReader{
 		super(fileToRead);
 	}
 	
-	public Map<NewsPaper,Map<String,List<Passage>>> loadData(){
+	public Map<NewsPaper,Map<String,List<Passage>>> loadData(boolean paragraph){
 		System.out.println("Load Started!");
 		long startTime = System.currentTimeMillis();
 		
@@ -43,12 +43,17 @@ public class NewsPaperLoader extends BaseReader{
 				}
 			}
 		};
+		Map<String,List<Passage>> myMap;
 		
 		for(File fileToAnalyse:getFileToRead().listFiles(myFileter)){
 			NewsPaper currentNewsPaper = getNewsPaper(fileToAnalyse.getName());
 			
 			passageReader = new PassageReader(fileToAnalyse);
-			Map<String,List<Passage>> myMap = passageReader.readPassagesIntoMap();
+			if(paragraph){
+				myMap = passageReader.readPassagesWithSeperatorsIntoMap();
+			}else{
+				myMap = passageReader.readPassagesIntoMap();
+			}
 			
 			dataMap.put(currentNewsPaper, myMap);
 		}

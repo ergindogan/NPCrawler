@@ -41,7 +41,7 @@ public class ANALYZER {
 		File folderToLoad = new File("/Users/ergindoganyildiz/Desktop/Loadtest");
 		
 		NewsPaperLoader loader = new NewsPaperLoader(folderToLoad);
-		Map<NewsPaper,Map<String,List<Passage>>> myMap = loader.loadData();
+		Map<NewsPaper,Map<String,List<Passage>>> myMap = loader.loadData(true);
 		
 		System.out.println("");
 		

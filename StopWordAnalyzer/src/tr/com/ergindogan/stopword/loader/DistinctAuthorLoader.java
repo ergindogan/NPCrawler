@@ -30,11 +30,11 @@ public class DistinctAuthorLoader extends BaseReader {
 	
 	//We have to ignore passages that has a title named null. Because these passages couldn't fetched and their
 	//body equals to Read time out.
-	public Map<String,List<Passage>> loadAndSelectQualifiedAuthors(CrossValidationType type, int topPassageCount){
+	public Map<String,List<Passage>> loadAndSelectQualifiedAuthors(CrossValidationType type, int topPassageCount, boolean paragraphs, int yazarSayisi){
 		List<Passage> tempList = new ArrayList<Passage>();
 		List<Passage> finalTempList = new ArrayList<Passage>();
 		
-		int yazarSayisi = 0;
+		int eklenenYazarSayisi = 0;
 		
 		Map<String,List<Passage>> qualifiedAuthorMap = new HashMap<String,List<Passage>>();
 		int dividor = 0;
@@ -44,7 +44,7 @@ public class DistinctAuthorLoader extends BaseReader {
 			dividor = 10;
 		}
 		
-		Map<String,List<Passage>> distinctAuthorMap = loadData();
+		Map<String,List<Passage>> distinctAuthorMap = loadData(paragraphs);
 		
 		for(String authorName : distinctAuthorMap.keySet()){
 			List<Passage> passages = distinctAuthorMap.get(authorName);
@@ -71,17 +71,17 @@ public class DistinctAuthorLoader extends BaseReader {
 							finalTempList.add(tempList.get(i));
 						}
 						qualifiedAuthorMap.put(authorName, finalTempList);
-						yazarSayisi++;
+						eklenenYazarSayisi++;
 					}else{
 						qualifiedAuthorMap.put(authorName, tempList);
-						yazarSayisi++;
+						eklenenYazarSayisi++;
 					}
 				}
 				finalTempList = new ArrayList<Passage>();
 				tempList = new ArrayList<Passage>();
 				passageAdded = 0;
 			}
-			if(yazarSayisi == 10){
+			if(yazarSayisi > 0 && eklenenYazarSayisi == yazarSayisi){
 				break;
 			}
 		}
@@ -89,12 +89,12 @@ public class DistinctAuthorLoader extends BaseReader {
 		return qualifiedAuthorMap;
 	}
 	
-	public Map<String,List<Passage>> loadData(){
+	public Map<String,List<Passage>> loadData(boolean paragraphs){
 		Map<String,List<Passage>> distinctAuthorMap = new HashMap<String,List<Passage>>();
 		
 		NewsPaperLoader loader = new NewsPaperLoader(getFileToRead());
 		
-		Map<NewsPaper,Map<String,List<Passage>>> myMap = loader.loadData();
+		Map<NewsPaper,Map<String,List<Passage>>> myMap = loader.loadData(paragraphs);
 		
 		Set<String> authorSet = new HashSet<String>();
 		

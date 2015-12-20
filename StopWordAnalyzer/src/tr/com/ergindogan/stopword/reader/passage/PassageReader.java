@@ -51,8 +51,6 @@ public class PassageReader extends BaseReader{
 						continue;
 					}
 					
-					passage.setWriterNameHeadlineDate(parts[0]);
-					
 					String [] paragraphs = getPassage(parts).split("_______");
 					passage.setParagraphs(Arrays.asList(paragraphs));
 					
@@ -60,6 +58,15 @@ public class PassageReader extends BaseReader{
 						myPassageString += paragraphs[i];
 					}
 					passage.setPassage(myPassageString);
+					
+					if(myPassageString.contains("Read timed out") 
+							|| myPassageString.contains("HTTP error fetching URL") 
+							|| myPassageString.contains("Yazi alinamadi.")){
+						myRecord = "";
+						continue;
+					}
+					
+					passage.setWriterNameHeadlineDate(parts[0]);
 					
 					if(passageMap.containsKey(passage.getAuthor())){
 						passageMap.get(passage.getAuthor()).add(passage);
