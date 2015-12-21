@@ -103,7 +103,7 @@ public class NBClassifier {
 			testMap = new HashMap<String,List<FeatureVector>>();
 		}
 		
-		System.out.println("Classification success rate : " + getFinalResult().getSuccessRate());
+		System.out.println("Classification success rate : %" + getFinalResult().getSuccessRate());
 		
 //		printResultMatrix();
 	}
@@ -172,6 +172,8 @@ public class NBClassifier {
 		long totalTime = endTime - startTime;
 		System.out.println("It took " + totalTime + " miliseconds to extract features.");
 		
+//		printVectorMap(featureVectorMap);
+		
 		return featureVectorMap;
 	}
 
@@ -197,6 +199,16 @@ public class NBClassifier {
 
 	public void setFinalResult(TestResult finalResult) {
 		this.finalResult = finalResult;
+	}
+	
+	private void printVectorMap(Map<String,List<FeatureVector>> featureVectorMap){
+		for(String authorName : featureVectorMap.keySet()){
+			System.out.println("Author : " + authorName);
+			for(int i = 0; i < featureVectorMap.get(authorName).size(); i++){
+				FeatureVector fv = featureVectorMap.get(authorName).get(i);
+				System.out.println("Passage : " + i + " Vector : " + fv.getVectorString());
+			}
+		}
 	}
 	
 }

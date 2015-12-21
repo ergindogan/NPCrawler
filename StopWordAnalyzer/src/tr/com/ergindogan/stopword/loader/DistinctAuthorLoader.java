@@ -30,7 +30,7 @@ public class DistinctAuthorLoader extends BaseReader {
 	
 	//We have to ignore passages that has a title named null. Because these passages couldn't fetched and their
 	//body equals to Read time out.
-	public Map<String,List<Passage>> loadAndSelectQualifiedAuthors(CrossValidationType type, int topPassageCount, boolean paragraphs, int yazarSayisi){
+	public Map<String,List<Passage>> loadAndSelectQualifiedAuthors(CrossValidationType type, int topPassageCount, int minPassageCount, boolean paragraphs, int yazarSayisi){
 		List<Passage> tempList = new ArrayList<Passage>();
 		List<Passage> finalTempList = new ArrayList<Passage>();
 		
@@ -48,7 +48,7 @@ public class DistinctAuthorLoader extends BaseReader {
 		
 		for(String authorName : distinctAuthorMap.keySet()){
 			List<Passage> passages = distinctAuthorMap.get(authorName);
-			if(passages.size() >= dividor){
+			if(passages.size() >= dividor && passages.size() > minPassageCount){
 				int passagesToSelect = passages.size() - (passages.size() % dividor);
 				if(topPassageCount > 0 && topPassageCount % 10 == 0 && passagesToSelect >= topPassageCount){
 					passagesToSelect = topPassageCount;

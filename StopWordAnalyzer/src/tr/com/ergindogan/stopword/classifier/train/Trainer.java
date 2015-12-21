@@ -40,7 +40,6 @@ public class Trainer {
 			Vector<Double> standarDeviationVector = calculateStandartDeviationVector(vectorList, authorName);
 			getStandartDeviationVector().put(authorName, standarDeviationVector);
 		}
-		
 	}
 	
 	private Vector<Double> calculateMeanVetor(List<FeatureVector> featureVectors){

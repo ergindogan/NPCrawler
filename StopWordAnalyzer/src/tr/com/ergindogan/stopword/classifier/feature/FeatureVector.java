@@ -40,5 +40,21 @@ public class FeatureVector {
 	private void addToVector(double value){
 		getVector().add(value);
 	}
+	
+	public String getVectorString(){
+		String vectorString = "[";
+		for(int i = 0; i < getVector().size(); i++){
+			vectorString = vectorString + getVector().get(i) + ",";
+		}
+		return vectorString.substring(0,vectorString.length() - 1) + "]";
+	}
+	
+	public static String getVectorString(Vector<Double> vec){
+		String vectorString = "[";
+		for(int i = 0; i < vec.size(); i++){
+			vectorString = vectorString + vec.get(i) + ",";
+		}
+		return vectorString.substring(0,vectorString.length() - 1) + "]";
+	}
 
 }

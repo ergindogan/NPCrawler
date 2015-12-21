@@ -16,7 +16,7 @@ public class TestResult {
 	}
 	
 	public double getSuccessRate(){
-		return getCorrectGuessCounter() / (getCorrectGuessCounter() + getFalseGuessCounter());
+		return (getCorrectGuessCounter() / (getCorrectGuessCounter() + getFalseGuessCounter())) * 100;
 	}
 	
 	public void increaseCorrectGuessCounter(double i){
