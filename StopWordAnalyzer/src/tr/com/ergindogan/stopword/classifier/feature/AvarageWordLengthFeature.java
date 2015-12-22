@@ -9,18 +9,37 @@ import java.util.List;
  */
 public class AvarageWordLengthFeature extends Feature {
 	
-	public AvarageWordLengthFeature(){
+	private boolean applyMorphologicalAnalysis;
+	
+	public AvarageWordLengthFeature(boolean applyMorphologicalAnalysis){
 		super();
+		setApplyMorphologicalAnalysis(applyMorphologicalAnalysis);
 	}
 
 	@Override
 	public double extractFeatureResult(String passage) {
 		double totalWordLength = 0.0;
-		List<String> words = splitPassageIntoWords(passage);
+		
+		List<String> words;
+		
+		if(applyMorphologicalAnalysis()){
+			words = splitPassageIntoWordsApplyHMM(passage);
+		}else{
+			words = splitPassageIntoWords(passage);
+		}
+		
 		for(String word:words){
 			totalWordLength += word.length();
 		}
 		return totalWordLength / words.size();
+	}
+
+	public boolean applyMorphologicalAnalysis() {
+		return applyMorphologicalAnalysis;
+	}
+
+	public void setApplyMorphologicalAnalysis(boolean applyMorphologicalAnalysis) {
+		this.applyMorphologicalAnalysis = applyMorphologicalAnalysis;
 	}
 
 }

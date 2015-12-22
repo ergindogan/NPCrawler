@@ -24,6 +24,7 @@ public class FeatureVector {
 			}
 			if(Double.isNaN(value)){
 				System.out.println("NAN!");
+				value = 1;
 			}
 			addToVector(value);
 		}

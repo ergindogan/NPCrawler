@@ -1,5 +1,7 @@
 package tr.com.ergindogan.stopword.classifier.crossover;
 
+
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

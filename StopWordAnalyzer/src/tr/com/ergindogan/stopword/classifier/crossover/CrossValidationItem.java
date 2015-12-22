@@ -1,5 +1,6 @@
 package tr.com.ergindogan.stopword.classifier.crossover;
 
+
 import tr.com.ergindogan.stopword.classifier.feature.FeatureVector;
 
 /**

@@ -1,5 +1,6 @@
 package tr.com.ergindogan.stopword.analyser;
 
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
