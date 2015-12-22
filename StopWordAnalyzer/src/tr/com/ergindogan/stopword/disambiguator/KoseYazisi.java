@@ -1,6 +1,7 @@
 package tr.com.ergindogan.stopword.disambiguator;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -15,6 +16,8 @@ public class KoseYazisi {
 	private String baslik;
 	private String koseYazisi;
 	private String yazarAdi;
+	
+	private List<String> paragraphs;
 	
 	public KoseYazisi(){
 		
@@ -59,8 +62,16 @@ public class KoseYazisi {
 		this.yazarAdi = yazarAdi;
 	}
 	
-	public static String getOneRecord(KoseYazisi koseYazisi){
-		return koseYazisi.getYazarAdi() + " - " + koseYazisi.getBaslik() + " - " + koseYazisi.getTarih() + "\n" + koseYazisi.getKoseYazisi() + "\n";
+	public String getOneRecord(){
+		return getYazarAdi() + " - " + getBaslik() + " - " + getTarih() + "\n" + ParagraphExtension.getParagraphString(getParagraphs(), getKoseYazisi())+ "\n";
+	}
+
+	public List<String> getParagraphs() {
+		return paragraphs;
+	}
+
+	public void setParagraphs(List<String> paragraphs) {
+		this.paragraphs = paragraphs;
 	}
 
 }

@@ -45,7 +45,7 @@ public class DisambiguatedDataCreator extends BaseReader{
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void createDisambiguatedFiles(){
 		NewsPaperLoader loader = new NewsPaperLoader(getFileToRead());
 		Map<NewsPaper,Map<String,List<Passage>>> myMap = loader.loadData(isParagragh());
@@ -56,26 +56,36 @@ public class DisambiguatedDataCreator extends BaseReader{
 			for(String authorName : authorMap.keySet()){
 				List<Passage> passages = authorMap.get(authorName);
 				for(Passage passage:passages){
-					List<Sentence> sentenceList = ts.split(passage.getPassage());
-					List<String> wordList = new ArrayList<String>();
+					List<String> newParagraphs = new ArrayList<String>();
 					String newSentence = "";
 					
-					for (Sentence sentence : sentenceList) {
-						try {
-							SentenceMorphParse sentenceParse = sentenceParser.parse(sentence.toString());
-							sentenceParser.disambiguate(sentenceParse);
-							
-							for (SentenceMorphParse.Entry entry : sentenceParse) {
-					            wordList.add(entry.parses.get(0).getLemma());
-					        }
-						} catch (Exception e) {
-							System.out.println(sentence.toString());
-							continue;
+					for(String paragraph:passage.getParagraphs()){
+						List<Sentence> sentenceList = ts.split(paragraph);
+						
+						List<String> wordList = new ArrayList<String>();
+						String tempSentence = "";
+						
+						for (Sentence sentence : sentenceList) {
+							try {
+								SentenceMorphParse sentenceParse = sentenceParser.parse(sentence.toString());
+								sentenceParser.disambiguate(sentenceParse);
+								
+								for (SentenceMorphParse.Entry entry : sentenceParse) {
+						            wordList.add(entry.parses.get(0).getLemma());
+						        }
+							} catch (Exception e) {
+								System.out.println(sentence.toString());
+								continue;
+							}
 						}
-					}
-					
-					for(String word:wordList){
-						newSentence = newSentence + word + " ";
+						
+						for(String word:wordList){
+							tempSentence = tempSentence + word + " ";
+						}
+						tempSentence = tempSentence.substring(0, tempSentence.length() - 1);
+						
+						newParagraphs.add(tempSentence);
+						newSentence = newSentence + tempSentence;
 					}
 					
 					KoseYazisi koseYazisi = new KoseYazisi(
@@ -83,8 +93,9 @@ public class DisambiguatedDataCreator extends BaseReader{
 							passage.getTitle(), 
 							newSentence, 
 							passage.getPublishDate());
+					koseYazisi.setParagraphs(newParagraphs);
 					
-					String oneRecord = KoseYazisi.getOneRecord(koseYazisi);
+					String oneRecord = koseYazisi.getOneRecord();
 					logger.warn(oneRecord);
 					logger.warn("------------------------------------------------------------------------------------------ \n");
 				}
