@@ -19,18 +19,19 @@ public class StopWordReader extends BaseReader{
 		super(fileToRead);
 	}
 	
-	public LinkedHashMap<String, Integer> readFileToMap(){
+	public LinkedHashMap<String, Integer> readFileToMap(int wordCount){
 		LinkedHashMap<String, Integer> myWordMap = new LinkedHashMap<String, Integer>();
 		
 		BufferedReader br = null;
-		
+		int counter = 0;
 		try {
 
 			String sCurrentLine;
 
 			br = new BufferedReader(new FileReader(getFileToRead().getAbsolutePath()));
 
-			while ((sCurrentLine = br.readLine()) != null) {
+			while ((sCurrentLine = br.readLine()) != null && ( wordCount <= 0 || counter < wordCount) ) {
+				counter++;
 				String[] keyAndValue = sCurrentLine.split("__");
 				
 				String key = keyAndValue[0].trim();

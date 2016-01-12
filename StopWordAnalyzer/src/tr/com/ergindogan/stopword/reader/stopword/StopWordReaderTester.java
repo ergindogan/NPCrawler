@@ -14,10 +14,11 @@ public class StopWordReaderTester {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		File myFrequencyFile = new File("/Users/ergindoganyildiz/Desktop/StopWords/wordFrequency.txt");
+		File myFrequencyFile = new File("/Users/ergindoganyildiz/Desktop/withParagraphs/"
+				+ "koklerine_ayrilmis/wordFrequency.txt");
 		
 		StopWordReader stopWordReader = new StopWordReader(myFrequencyFile);
-		LinkedHashMap<String, Integer> myWordMap = stopWordReader.readFileToMap();
+		LinkedHashMap<String, Integer> myWordMap = stopWordReader.readFileToMap(2);
 		
 		for(String key:myWordMap.keySet()){
 			System.out.println("Word :" + key + " Frequency : " + myWordMap.get(key));
