@@ -56,6 +56,9 @@ public class DisambiguatedDataCreator extends BaseReader{
 			for(String authorName : authorMap.keySet()){
 				List<Passage> passages = authorMap.get(authorName);
 				for(Passage passage:passages){
+//					if(passage.getTitle().equals("Aldebaran, Regulus, Atares ve Fomalhaut")){
+//						System.out.println("Problem!");
+//					}
 					List<String> newParagraphs = new ArrayList<String>();
 					String newSentence = "";
 					
@@ -82,9 +85,13 @@ public class DisambiguatedDataCreator extends BaseReader{
 						for(String word:wordList){
 							tempSentence = tempSentence + word + " ";
 						}
-						tempSentence = tempSentence.substring(0, tempSentence.length() - 1);
 						
-						newParagraphs.add(tempSentence);
+						if(!tempSentence.isEmpty()){
+							tempSentence = tempSentence.substring(0, tempSentence.length() - 1);
+							
+							newParagraphs.add(tempSentence);
+						}
+						
 						newSentence = newSentence + tempSentence;
 					}
 					
