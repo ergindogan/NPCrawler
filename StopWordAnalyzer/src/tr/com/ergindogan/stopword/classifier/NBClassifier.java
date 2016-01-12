@@ -62,7 +62,7 @@ public class NBClassifier {
 			iterationCount = iterationsForAuthor.size();
 		}
 		
-		//With final iteration indexes now we can construct each iterations author-feature vectors.
+		//With final iteration indexes ready, now we can construct each iterations author-feature vectors.
 		for(int i = 0; i < iterationCount; i++){
 			
 			for(String authorName : allIterations.keySet()){
