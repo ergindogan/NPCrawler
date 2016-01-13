@@ -8,7 +8,7 @@ import java.util.Vector;
 
 import tr.com.ergindogan.stopword.classifier.feature.NominalVector;
 
-public class NominalTrainer implements Trainable{
+public class NominalTrainer extends BaseTrainer{
 	
 	private LinkedHashMap<String, Integer> myWordMap;
 	private Map<String, List<NominalVector>> nominalVectorsToClassify;
