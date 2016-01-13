@@ -40,11 +40,11 @@ public abstract class Feature implements FeatureExtructable{
 		
 	}
 	
-	protected List<Sentence> splitPassageIntoSentences(String passage){
+	public static List<Sentence> splitPassageIntoSentences(String passage){
 		return ts.split(passage);
 	}
 	
-	protected List<String> splitPassageIntoWords(String passage){
+	public static List<String> splitPassageIntoWords(String passage){
 		List<String> wordList = new ArrayList<String>();
 		
 		List<Sentence> sentenceList = splitPassageIntoSentences(passage);

@@ -8,9 +8,7 @@ import java.util.Vector;
  * 
  * Dec 11, 2015
  */
-public class FeatureVector {
-	
-	private Vector<Double> vector;
+public class FeatureVector extends BaseVector{
 	
 	public FeatureVector(List<Feature> features, String passage, List<String> paragraphs){
 		double value = 0.0;
@@ -28,34 +26,6 @@ public class FeatureVector {
 			}
 			addToVector(value);
 		}
-	}
-
-	public Vector<Double> getVector() {
-		return vector;
-	}
-
-	public void setVector(Vector<Double> vector) {
-		this.vector = vector;
-	}
-	
-	private void addToVector(double value){
-		getVector().add(value);
-	}
-	
-	public String getVectorString(){
-		String vectorString = "[";
-		for(int i = 0; i < getVector().size(); i++){
-			vectorString = vectorString + getVector().get(i) + ",";
-		}
-		return vectorString.substring(0,vectorString.length() - 1) + "]";
-	}
-	
-	public static String getVectorString(Vector<Double> vec){
-		String vectorString = "[";
-		for(int i = 0; i < vec.size(); i++){
-			vectorString = vectorString + vec.get(i) + ",";
-		}
-		return vectorString.substring(0,vectorString.length() - 1) + "]";
 	}
 
 }
