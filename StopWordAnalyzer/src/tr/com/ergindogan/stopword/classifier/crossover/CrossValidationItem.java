@@ -1,31 +1,30 @@
 package tr.com.ergindogan.stopword.classifier.crossover;
 
 
-import tr.com.ergindogan.stopword.classifier.feature.FeatureVector;
 
 /**
  * @author ergindoganyildiz
  * 
  * Dec 6, 2015
  */
-public class CrossValidationItem {
+public class CrossValidationItem<T> {
 	
-	private FeatureVector vector;
+	private T item;
 	private boolean tested;
 	private boolean pickedForTesting;
 	
-	public CrossValidationItem(FeatureVector vector){
-		setVector(vector);
+	public CrossValidationItem(T item){
+		setItem(item);
 		setTested(false);
 		setPickedForTesting(false);
 	}
 
-	public FeatureVector getVector() {
-		return vector;
+	public T getItem() {
+		return item;
 	}
 
-	public void setVector(FeatureVector vector) {
-		this.vector = vector;
+	public void setItem(T item) {
+		this.item = item;
 	}
 
 	public boolean isTested() {

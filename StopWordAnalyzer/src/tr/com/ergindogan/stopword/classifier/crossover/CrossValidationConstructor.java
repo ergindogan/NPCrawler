@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import tr.com.ergindogan.stopword.classifier.feature.FeatureVector;
-
 /**
  * @author ergindoganyildiz
  * 
@@ -23,11 +21,11 @@ public class CrossValidationConstructor {
 	private boolean random;
 	
 	
-	public CrossValidationConstructor(List<FeatureVector> vectorList, int trainRatio, int testRatio, boolean random){
+	public CrossValidationConstructor(List<?> vectorList, int trainRatio, int testRatio, boolean random){
 		itemList = new ArrayList<CrossValidationItem>();
 		
-		for(FeatureVector vector : vectorList){
-			CrossValidationItem crossoverItem = new CrossValidationItem(vector);
+		for(Object item : vectorList){
+			CrossValidationItem crossoverItem = new CrossValidationItem(item);
 			itemList.add(crossoverItem);
 		}
 		
