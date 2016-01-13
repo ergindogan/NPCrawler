@@ -8,15 +8,15 @@ import java.util.Map;
 
 import tr.com.ergindogan.stopword.classifier.crossover.CrossValidationConstructor;
 import tr.com.ergindogan.stopword.classifier.crossover.Iteration;
-import tr.com.ergindogan.stopword.classifier.feature.FeatureVector;
+import tr.com.ergindogan.stopword.classifier.feature.NominalVector;
 import tr.com.ergindogan.stopword.classifier.test.TestResult;
-import tr.com.ergindogan.stopword.classifier.test.Tester;
+import tr.com.ergindogan.stopword.classifier.train.NominalTrainer;
 import tr.com.ergindogan.stopword.classifier.train.Trainer;
 import tr.com.ergindogan.stopword.reader.passage.Passage;
 
 public class NominalNBClassifier {
 	
-	private Map<String,List<List<Integer>>> nominalVectorsToClassify;
+	private Map<String,List<NominalVector>> nominalVectorsToClassify;
 	private LinkedHashMap<String, Integer> myWordMap;
 	private int trainRatio;
 	private int testRatio;
@@ -37,18 +37,18 @@ public class NominalNBClassifier {
 		CrossValidationConstructor crossoverConstructor;
 		Map<String,List<Iteration>> allIterations = new HashMap<String,List<Iteration>>();
 		
-		Map<String,List<List<Integer>>> trainMap = new HashMap<String,List<List<Integer>>>();
-		Map<String,List<List<Integer>>> testMap = new HashMap<String,List<List<Integer>>>();
+		Map<String,List<NominalVector>> trainMap = new HashMap<String,List<NominalVector>>();
+		Map<String,List<NominalVector>> testMap = new HashMap<String,List<NominalVector>>();
 		
-		List<List<Integer>> trainFeatureVectorList;
-		List<List<Integer>> testFeatureVectorList;
+		List<NominalVector> trainFeatureVectorList;
+		List<NominalVector> testFeatureVectorList;
 		
 		int iterationCount = 0;
 		
 		//Construct final iteration Indexes.
 		for(String authorName : getNominalVectorsToClassify().keySet()){
 			//burada her bir loop her bir yazarin butun train test ikililerini dondurucek.
-			List<List<Integer>> nominalVectorList = getNominalVectorsToClassify().get(authorName);
+			List<NominalVector> nominalVectorList = getNominalVectorsToClassify().get(authorName);
 			crossoverConstructor = new CrossValidationConstructor(nominalVectorList, getTrainRatio(), getTestRatio(), false);
 			
 			List<Iteration> iterationsForAuthor = crossoverConstructor.constructIterations();
@@ -60,8 +60,8 @@ public class NominalNBClassifier {
 		for(int i = 0; i < iterationCount; i++){
 			
 			for(String authorName : allIterations.keySet()){
-				trainFeatureVectorList = new ArrayList<List<Integer>>();
-				testFeatureVectorList = new ArrayList<List<Integer>>();
+				trainFeatureVectorList = new ArrayList<NominalVector>();
+				testFeatureVectorList = new ArrayList<NominalVector>();
 				
 				List<Iteration> iterations = allIterations.get(authorName);
 				Iteration currentIterationToAdd = iterations.get(i);
@@ -81,9 +81,8 @@ public class NominalNBClassifier {
 			}
 			
 			//train the trainMap
-			//TODO: Write new Trainer.
-//			Trainer trainer = new Trainer(trainMap, getFeatures());
-//			trainer.train();
+			NominalTrainer trainer = new NominalTrainer(trainMap, getMyWordMap());
+			trainer.train();
 			
 			//test the testMap
 			//TODO: Write new Tester
@@ -95,8 +94,8 @@ public class NominalNBClassifier {
 			System.out.println("Iteration " + i + " correct : " + result.getCorrectGuessCounter() + " false : " + result.getFalseGuessCounter());
 			
 			//reinitialize maps after each iteration.
-			trainMap = new HashMap<String,List<List<Integer>>>();
-			testMap = new HashMap<String,List<List<Integer>>>();
+			trainMap = new HashMap<String,List<NominalVector>>();
+			testMap = new HashMap<String,List<NominalVector>>();
 		}
 		
 		System.out.println("Classification success rate : %" + getFinalResult().getSuccessRate());
@@ -131,7 +130,7 @@ public class NominalNBClassifier {
 		this.finalResult = finalResult;
 	}
 
-	public Map<String, List<List<Integer>>> getNominalVectorsToClassify() {
+	public Map<String, List<NominalVector>> getNominalVectorsToClassify() {
 		return nominalVectorsToClassify;
 	}
 
@@ -143,7 +142,36 @@ public class NominalNBClassifier {
 		this.myWordMap = myWordMap;
 	}
 
-	public void setNominalVectorsToClassify(Map<String,List<Passage>> map) {
-		//TODO: Calculate nominal vectors using myWordMap and set it.
+	public void setNominalVectorsToClassify(Map<String,List<Passage>> myMap) {
+		this.nominalVectorsToClassify = getAuthorNominalVectorMap(myMap);
+	}
+	
+	private Map<String,List<NominalVector>> getAuthorNominalVectorMap(Map<String,List<Passage>> myMap){
+		System.out.println("Nominal Feature Extraction Started!");
+		long startTime = System.currentTimeMillis();
+		
+		Map<String,List<NominalVector>> nominalVectorMap = new HashMap<String,List<NominalVector>>();
+		List<NominalVector> tempFeatureList;
+		
+		for(String authorName : myMap.keySet()){
+			List<Passage> passages = myMap.get(authorName);
+			tempFeatureList = new ArrayList<NominalVector>();
+			
+			for(Passage passage : passages){
+				if(!passage.getPassage().isEmpty()){
+					NominalVector nominalVector = new NominalVector(getMyWordMap(), passage.getPassage());
+					tempFeatureList.add(nominalVector);
+				}
+			}
+			nominalVectorMap.put(authorName, tempFeatureList);
+		}
+		
+		long endTime   = System.currentTimeMillis();
+		System.out.println("Nominal Feature Extraction Finished!");
+		
+		long totalTime = endTime - startTime;
+		System.out.println("It took " + totalTime + " miliseconds to extract nominal features.");
+		
+		return nominalVectorMap;
 	}
 }
