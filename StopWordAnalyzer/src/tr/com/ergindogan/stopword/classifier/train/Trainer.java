@@ -13,7 +13,7 @@ import tr.com.ergindogan.stopword.classifier.feature.FeatureVector;
  * 
  * Dec 11, 2015
  */
-public class Trainer {
+public class Trainer implements Trainable{
 	
 	private List<Feature> features;
 	
@@ -30,7 +30,8 @@ public class Trainer {
 		setStandartDeviationVector(new HashMap<String, Vector<Double>>());
 	}
 
-	public void train(){
+	@Override
+	public void train() {
 		for(String authorName : getAuthorFeatureVectorMap().keySet()){
 			List<FeatureVector> vectorList = getAuthorFeatureVectorMap().get(authorName);
 			
@@ -141,4 +142,5 @@ public class Trainer {
 			Map<String, Vector<Double>> standartDeviationVector) {
 		this.standartDeviationVector = standartDeviationVector;
 	}
+
 }
