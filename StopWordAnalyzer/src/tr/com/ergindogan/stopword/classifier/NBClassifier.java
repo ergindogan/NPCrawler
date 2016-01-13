@@ -109,9 +109,9 @@ public class NBClassifier {
 	}
 	
 	
-	private void printResultMatrix(){
+	private void printResultMatrix(Tester tester){
 		for(String authorName : getFeatureVectorsToClassify().keySet()){
-			Map<String,Integer> guesses = Tester.choices.get(authorName);
+			Map<String,Integer> guesses = tester.getChoices().get(authorName);
 			String guessesString = "";
 			for(String guessAuthorName : getFeatureVectorsToClassify().keySet()){
 				if(!guesses.containsKey(guessAuthorName)){
