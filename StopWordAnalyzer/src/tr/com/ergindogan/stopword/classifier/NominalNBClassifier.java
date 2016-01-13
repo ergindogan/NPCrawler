@@ -9,9 +9,9 @@ import java.util.Map;
 import tr.com.ergindogan.stopword.classifier.crossover.CrossValidationConstructor;
 import tr.com.ergindogan.stopword.classifier.crossover.Iteration;
 import tr.com.ergindogan.stopword.classifier.feature.NominalVector;
+import tr.com.ergindogan.stopword.classifier.test.NominalTester;
 import tr.com.ergindogan.stopword.classifier.test.TestResult;
 import tr.com.ergindogan.stopword.classifier.train.NominalTrainer;
-import tr.com.ergindogan.stopword.classifier.train.Trainer;
 import tr.com.ergindogan.stopword.reader.passage.Passage;
 
 public class NominalNBClassifier {
@@ -85,9 +85,8 @@ public class NominalNBClassifier {
 			trainer.train();
 			
 			//test the testMap
-			//TODO: Write new Tester
-//			Tester tester = new Tester(testMap, trainer);
-//			result = tester.test();
+			NominalTester tester = new NominalTester(testMap, trainer);
+			result = tester.test();
 			
 			//add mid results to the final result.
 			addMidResultsToFinalResult(result);
