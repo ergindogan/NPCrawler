@@ -13,7 +13,7 @@ import tr.com.ergindogan.stopword.classifier.feature.FeatureVector;
  * 
  * Dec 11, 2015
  */
-public class Trainer implements Trainable{
+public class Trainer extends BaseTrainer{
 	
 	private List<Feature> features;
 	
