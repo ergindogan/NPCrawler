@@ -59,24 +59,25 @@ public class NominalTester extends BaseTester<NominalVector>{
 			}
 		}
 		
-		return null;
+		return testResult;
 	}
 
 	@Override
 	public double calculateProbability(NominalVector vector, String possibleAuthorName) {
 		double value = 0.0;
 		double propability = getPriorProbability(possibleAuthorName);
+		double condProb = 0.0;
+		double logCondProb = 0.0;
 		
 		for(int i = 0; i < vector.getVector().size(); i++){
 			value = vector.getVector().get(i);
 			//En fazla gecen X kelime (nominal) listesinde olup bu yazıda geçenler için.
 			if(value != 0){
-				propability += Math.log(
-							((NominalTrainer) getTrainer()).
-								getTrainMatrix().
-								get(possibleAuthorName).
-								getVector().
-								get(i));
+				condProb = ((NominalTrainer) getTrainer()).getTrainMatrix().get(possibleAuthorName).getVector().get(i);
+				//Burada log negatif deger donduruyor.
+				logCondProb = Math.log(condProb);
+						
+				propability = propability + logCondProb;
 			}
 		}
 		return propability;
