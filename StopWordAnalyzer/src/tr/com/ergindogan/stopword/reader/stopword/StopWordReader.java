@@ -31,13 +31,16 @@ public class StopWordReader extends BaseReader{
 			br = new BufferedReader(new FileReader(getFileToRead().getAbsolutePath()));
 
 			while ((sCurrentLine = br.readLine()) != null && ( wordCount <= 0 || counter < wordCount) ) {
-				counter++;
 				String[] keyAndValue = sCurrentLine.split("__");
 				
 				String key = keyAndValue[0].trim();
-				Integer value = Integer.parseInt(keyAndValue[1].trim());
 				
-				myWordMap.put(key, value);
+				if(!key.equals("UNK")){
+					Integer value = Integer.parseInt(keyAndValue[1].trim());
+					
+					myWordMap.put(key, value);
+					counter++;
+				}
 			}
 			
 		} catch (IOException e) {
