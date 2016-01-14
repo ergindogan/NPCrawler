@@ -56,7 +56,7 @@ public class DisambiguatedDataCreator extends BaseReader{
 			for(String authorName : authorMap.keySet()){
 				List<Passage> passages = authorMap.get(authorName);
 				for(Passage passage:passages){
-//					if(passage.getTitle().equals("Aldebaran, Regulus, Atares ve Fomalhaut")){
+//					if(passage.getTitle().equals("Rezaletin daniskası!")){
 //						System.out.println("Problem!");
 //					}
 					List<String> newParagraphs = new ArrayList<String>();
