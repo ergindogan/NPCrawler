@@ -42,10 +42,11 @@ public class NominalTrainer extends BaseTrainer{
 		
 		Vector<Double> resultVector = new Vector<Double>(vector.size());
 		
-		for(int i = 0; i < vector.size(); i++){
-			value = (vector.get(i) + 1) / (sum + vector.size());
-			resultVector.set(i, value);
+		for(double vectorValue:vector){
+			value = (vectorValue + 1) / (sum + vector.size());
+			resultVector.add(value);
 		}
+
 		return resultVector;
 	}
 	
