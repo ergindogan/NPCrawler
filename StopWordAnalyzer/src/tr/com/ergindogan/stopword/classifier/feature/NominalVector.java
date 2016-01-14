@@ -1,5 +1,6 @@
 package tr.com.ergindogan.stopword.classifier.feature;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Vector;
@@ -8,27 +9,33 @@ public class NominalVector extends BaseVector{
 	
 	public NominalVector(LinkedHashMap<String, Integer> myWordMap){
 		setVector(new Vector<Double>(myWordMap.size()));
+		
+		for(int i = 1; i < myWordMap.size() + 1; i++){
+			getVector().add(0.0);
+		}
 	}
 	
 	public NominalVector(LinkedHashMap<String, Integer> myWordMap, String passage){
 		setVector(new Vector<Double>(myWordMap.size()));
 		
+		LinkedHashMap<String, Integer> tempWordMap = new LinkedHashMap<String, Integer>(myWordMap.size());
+		
 		List<String> words = Feature.splitPassageIntoWords(passage);
 		
 		for(String word:myWordMap.keySet()){
-			myWordMap.put(word, 0);
+			tempWordMap.put(word, 0);
 		}
 		
 		for(String word:words){
-			boolean contains = myWordMap.containsKey(word);
+			boolean contains = tempWordMap.containsKey(word);
 			
 			if(contains){
-				myWordMap.put(word, myWordMap.get(word) + 1);
+				tempWordMap.put(word, tempWordMap.get(word) + 1);
 			}
 		}
 		
-		for(String word:myWordMap.keySet()){
-			addToVector(myWordMap.get(word));
+		for(String word:tempWordMap.keySet()){
+			addToVector(tempWordMap.get(word));
 		}
 	}
 
