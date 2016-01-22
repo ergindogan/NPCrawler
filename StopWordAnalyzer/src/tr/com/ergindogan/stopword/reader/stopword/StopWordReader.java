@@ -19,11 +19,13 @@ public class StopWordReader extends BaseReader{
 		super(fileToRead);
 	}
 	
-	public LinkedHashMap<String, Integer> readFileToMap(int wordCount){
+	public LinkedHashMap<String, Integer> readFileToMap(int wordCount, int padding){
 		LinkedHashMap<String, Integer> myWordMap = new LinkedHashMap<String, Integer>();
 		
 		BufferedReader br = null;
 		int counter = 0;
+		int paddingCounter = 0;
+		
 		try {
 
 			String sCurrentLine;
@@ -34,6 +36,11 @@ public class StopWordReader extends BaseReader{
 				String[] keyAndValue = sCurrentLine.split("__");
 				
 				String key = keyAndValue[0].trim();
+				
+				if(paddingCounter < padding && !key.equals("UNK")){
+					paddingCounter++;
+					continue;
+				}
 				
 				if(!key.equals("UNK")){
 					Integer value = Integer.parseInt(keyAndValue[1].trim());
