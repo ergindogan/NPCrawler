@@ -18,7 +18,7 @@ public class StopWordReaderTester {
 				+ "koklerine_ayrilmis/wordFrequency.txt");
 		
 		StopWordReader stopWordReader = new StopWordReader(myFrequencyFile);
-		LinkedHashMap<String, Integer> myWordMap = stopWordReader.readFileToMap(2);
+		LinkedHashMap<String, Integer> myWordMap = stopWordReader.readFileToMap(10,10);
 		
 		for(String key:myWordMap.keySet()){
 			System.out.println("Word :" + key + " Frequency : " + myWordMap.get(key));
