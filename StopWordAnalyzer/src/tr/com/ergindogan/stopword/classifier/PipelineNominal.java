@@ -26,7 +26,7 @@ public class PipelineNominal {
 				+ "koklerine_ayrilmis/wordFrequency.txt");
 		
 		StopWordReader stopWordReader = new StopWordReader(myFrequencyFile);
-		LinkedHashMap<String, Integer> myWordMap = stopWordReader.readFileToMap(200);
+		LinkedHashMap<String, Integer> myWordMap = stopWordReader.readFileToMap(190,10000);
 		
 		//Classify...
 		NominalNBClassifier myClassifier = new NominalNBClassifier(myMap, myWordMap, 90, 10);
