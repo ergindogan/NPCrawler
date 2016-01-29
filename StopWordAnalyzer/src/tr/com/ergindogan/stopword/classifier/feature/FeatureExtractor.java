@@ -2,6 +2,7 @@ package tr.com.ergindogan.stopword.classifier.feature;
 
 import java.util.List;
 
+import tr.com.ergindogan.stopword.classifier.vector.FeatureVector;
 import tr.com.ergindogan.stopword.reader.passage.Passage;
 
 /**
