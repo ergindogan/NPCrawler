@@ -6,29 +6,24 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import tr.com.ergindogan.stopword.classifier.BaseClassifier;
 import tr.com.ergindogan.stopword.classifier.crossover.CrossValidationConstructor;
 import tr.com.ergindogan.stopword.classifier.crossover.Iteration;
-import tr.com.ergindogan.stopword.classifier.feature.NominalVector;
 import tr.com.ergindogan.stopword.classifier.test.NominalTester;
 import tr.com.ergindogan.stopword.classifier.test.TestResult;
 import tr.com.ergindogan.stopword.classifier.train.NominalTrainer;
+import tr.com.ergindogan.stopword.classifier.vector.NominalVector;
 import tr.com.ergindogan.stopword.reader.passage.Passage;
 
-public class NominalNBClassifier {
+public class NominalNBClassifier extends BaseClassifier{
 	
 	private Map<String,List<NominalVector>> nominalVectorsToClassify;
 	private LinkedHashMap<String, Integer> myWordMap;
-	private int trainRatio;
-	private int testRatio;
-	
-	private TestResult finalResult;
 
 	public NominalNBClassifier(Map<String,List<Passage>> myMap, LinkedHashMap<String, Integer> myWordMap, int trainRatio, int testRatio){
-		setTrainRatio(trainRatio);
-		setTestRatio(testRatio);
+		super(trainRatio, testRatio, new TestResult());
 		setMyWordMap(myWordMap);
 		setNominalVectorsToClassify(myMap);
-		setFinalResult(new TestResult());
 	}
 	
 	public void classify(){
@@ -98,35 +93,6 @@ public class NominalNBClassifier {
 		}
 		
 		System.out.println("Classification success rate : %" + getFinalResult().getSuccessRate());
-	}
-	
-	private void addMidResultsToFinalResult(TestResult testResult){
-		getFinalResult().increaseCorrectGuessCounter(testResult.getCorrectGuessCounter());
-		getFinalResult().increaseFalseGuessCounter(testResult.getFalseGuessCounter());
-	}
-
-	public int getTrainRatio() {
-		return trainRatio;
-	}
-
-	public void setTrainRatio(int trainRatio) {
-		this.trainRatio = trainRatio;
-	}
-
-	public int getTestRatio() {
-		return testRatio;
-	}
-
-	public void setTestRatio(int testRatio) {
-		this.testRatio = testRatio;
-	}
-
-	public TestResult getFinalResult() {
-		return finalResult;
-	}
-
-	public void setFinalResult(TestResult finalResult) {
-		this.finalResult = finalResult;
 	}
 
 	public Map<String, List<NominalVector>> getNominalVectorsToClassify() {
