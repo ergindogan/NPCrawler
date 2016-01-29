@@ -5,13 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import tr.com.ergindogan.stopword.classifier.BaseClassifier;
 import tr.com.ergindogan.stopword.classifier.crossover.CrossValidationConstructor;
 import tr.com.ergindogan.stopword.classifier.crossover.Iteration;
 import tr.com.ergindogan.stopword.classifier.feature.Feature;
-import tr.com.ergindogan.stopword.classifier.feature.FeatureVector;
 import tr.com.ergindogan.stopword.classifier.test.TestResult;
 import tr.com.ergindogan.stopword.classifier.test.Tester;
 import tr.com.ergindogan.stopword.classifier.train.Trainer;
+import tr.com.ergindogan.stopword.classifier.vector.FeatureVector;
 import tr.com.ergindogan.stopword.reader.passage.Passage;
 
 /**
@@ -19,21 +20,15 @@ import tr.com.ergindogan.stopword.reader.passage.Passage;
  * 
  * Dec 11, 2015
  */
-public class NBClassifier {
+public class NBClassifier extends BaseClassifier{
 	
 	private Map<String,List<FeatureVector>> featureVectorsToClassify;
 	private List<Feature> features;
-	private int trainRatio;
-	private int testRatio;
-	
-	private TestResult finalResult;
 
 	public NBClassifier(Map<String,List<Passage>> myMap, List<Feature> features, int trainRatio, int testRatio){
+		super(trainRatio, testRatio, new TestResult());
 		setFeatures(features);
-		setTrainRatio(trainRatio);
-		setTestRatio(testRatio);
 		setFeatureVectorsToClassify(myMap);
-		setFinalResult(new TestResult());
 	}
 	
 	//We are assuming all authors have same amount of iterations.
@@ -123,11 +118,6 @@ public class NBClassifier {
 			System.out.println(authorName + " : " + guessesString);
 		}
 	}
-	
-	private void addMidResultsToFinalResult(TestResult testResult){
-		getFinalResult().increaseCorrectGuessCounter(testResult.getCorrectGuessCounter());
-		getFinalResult().increaseFalseGuessCounter(testResult.getFalseGuessCounter());
-	}
 
 	public List<Feature> getFeatures() {
 		return features;
@@ -175,30 +165,6 @@ public class NBClassifier {
 //		printVectorMap(featureVectorMap);
 		
 		return featureVectorMap;
-	}
-
-	public int getTrainRatio() {
-		return trainRatio;
-	}
-
-	public void setTrainRatio(int trainRatio) {
-		this.trainRatio = trainRatio;
-	}
-
-	public int getTestRatio() {
-		return testRatio;
-	}
-
-	public void setTestRatio(int testRatio) {
-		this.testRatio = testRatio;
-	}
-
-	public TestResult getFinalResult() {
-		return finalResult;
-	}
-
-	public void setFinalResult(TestResult finalResult) {
-		this.finalResult = finalResult;
 	}
 	
 	private void printVectorMap(Map<String,List<FeatureVector>> featureVectorMap){
