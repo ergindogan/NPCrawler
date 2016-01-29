@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import tr.com.ergindogan.stopword.classifier.feature.FeatureVector;
 import tr.com.ergindogan.stopword.classifier.train.Trainer;
+import tr.com.ergindogan.stopword.classifier.vector.FeatureVector;
 
 /**
  * @author ergindoganyildiz

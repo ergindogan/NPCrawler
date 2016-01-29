@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import tr.com.ergindogan.stopword.classifier.feature.NominalVector;
 import tr.com.ergindogan.stopword.classifier.train.NominalTrainer;
+import tr.com.ergindogan.stopword.classifier.vector.NominalVector;
 
 public class NominalTester extends BaseTester<NominalVector>{
 	
