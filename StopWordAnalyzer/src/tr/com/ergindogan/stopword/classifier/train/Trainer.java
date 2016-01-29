@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import tr.com.ergindogan.stopword.classifier.feature.Feature;
-import tr.com.ergindogan.stopword.classifier.feature.FeatureVector;
+import tr.com.ergindogan.stopword.classifier.vector.FeatureVector;
 
 /**
  * @author ergindoganyildiz
@@ -35,52 +35,12 @@ public class Trainer extends BaseTrainer{
 		for(String authorName : getAuthorFeatureVectorMap().keySet()){
 			List<FeatureVector> vectorList = getAuthorFeatureVectorMap().get(authorName);
 			
-			Vector<Double> meanVector = calculateMeanVetor(vectorList);
+			Vector<Double> meanVector = calculateMeanVetor(vectorList, getFeatures());
 			getMeanVector().put(authorName, meanVector);
 			
-			Vector<Double> standarDeviationVector = calculateStandartDeviationVector(vectorList, authorName);
-			getStandartDeviationVector().put(authorName, standarDeviationVector);
+			Vector<Double> standardDeviationVector = calculateStandartDeviationVector(vectorList, authorName, getFeatures() ,getMeanVector());
+			getStandartDeviationVector().put(authorName, standardDeviationVector);
 		}
-	}
-	
-	private Vector<Double> calculateMeanVetor(List<FeatureVector> featureVectors){
-		Vector<Double> meanVector = new Vector<Double>(getFeatures().size());
-		
-		double size = featureVectors.size();
-		int featureSize = getFeatures().size();
-		
-		Double sum = 0.0;
-		
-		for(int i = 0; i < featureSize; i++){
-			for(FeatureVector featureVector : featureVectors){
-				double value = featureVector.getVector().get(i);
-				sum += value;
-			}
-			meanVector.add(i, sum/size);
-			sum = 0.0;
-		}
-		
-		return meanVector;
-	}
-	
-	private Vector<Double> calculateStandartDeviationVector(List<FeatureVector> featureVectors, String authorName){
-		Vector<Double> standartDeviationVector = new Vector<Double>(getFeatures().size());
-		
-		int size = featureVectors.size();
-		int featureSize = getFeatures().size();
-		
-		double sum = 0.0;
-		
-		for(int i = 0; i < featureSize; i++){
-			for(FeatureVector featureVector : featureVectors){
-				double value = featureVector.getVector().get(i);
-				sum = sum + Math.pow((value - getMeanVector().get(authorName).get(i)), 2);
-			}
-			standartDeviationVector.add(i, Math.sqrt(sum/(size - 1)));
-			sum = 0.0;
-		}
-		
-		return standartDeviationVector;
 	}
 	
 	public double getMean(String authorName, int featureIndex){

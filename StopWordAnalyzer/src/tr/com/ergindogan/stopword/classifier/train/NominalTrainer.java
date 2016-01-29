@@ -4,9 +4,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
-import tr.com.ergindogan.stopword.classifier.feature.NominalVector;
+import tr.com.ergindogan.stopword.classifier.vector.NominalVector;
 
 public class NominalTrainer extends BaseTrainer{
 	
@@ -34,28 +33,6 @@ public class NominalTrainer extends BaseTrainer{
 			
 			getTrainMatrix().put(authorName, tempVector);
 		}
-	}
-	
-	private Vector<Double> calculateConProb(Vector<Double> vector){
-		double sum = calculateTotal(vector);
-		double value = 0.0;
-		
-		Vector<Double> resultVector = new Vector<Double>(vector.size());
-		
-		for(double vectorValue:vector){
-			value = (vectorValue + 1) / (sum + vector.size());
-			resultVector.add(value);
-		}
-
-		return resultVector;
-	}
-	
-	private double calculateTotal(Vector<Double> vector){
-		double sum = 0.0;
-		for(double value :vector){
-			sum += value;
-		}
-		return sum;
 	}
 
 	public LinkedHashMap<String, Integer> getMyWordMap() {
