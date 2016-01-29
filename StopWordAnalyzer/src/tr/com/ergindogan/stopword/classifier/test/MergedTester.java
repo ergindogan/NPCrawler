@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import tr.com.ergindogan.stopword.classifier.train.MergedTrainer;
-import tr.com.ergindogan.stopword.classifier.train.NominalTrainer;
-import tr.com.ergindogan.stopword.classifier.train.Trainer;
 import tr.com.ergindogan.stopword.classifier.vector.BaseVector;
 import tr.com.ergindogan.stopword.classifier.vector.FeatureVector;
 import tr.com.ergindogan.stopword.classifier.vector.NominalVector;
@@ -79,7 +77,7 @@ public class MergedTester extends BaseTester<PassageVector> {
 				finalProbability = finalProbability * calculateNBTestProb(myFV, possibleAuthorName);
 			}else{
 				NominalVector myNV = (NominalVector) vec;
-				finalProbability = finalProbability * calculateNominalTestProb(myNV, possibleAuthorName);
+				finalProbability = finalProbability * Math.pow(Math.E, calculateNominalTestProb(myNV, possibleAuthorName));
 			}
 		}
 		return finalProbability;
@@ -97,7 +95,7 @@ public class MergedTester extends BaseTester<PassageVector> {
 			value = vector.getVector().get(i);
 			//En fazla gecen X kelime (nominal) listesinde olup bu yazıda geçenler için.
 			if(value != 0){
-				condProb = ((NominalTrainer) getTrainer()).getTrainMatrix().get(possibleAuthorName).getVector().get(i);
+				condProb = ((MergedTrainer) getTrainer()).getNominalTrainMatrix().get(possibleAuthorName).getVector().get(i);
 				//Burada log negatif deger donduruyor.
 				logCondProb = Math.log(condProb);
 						
@@ -115,12 +113,12 @@ public class MergedTester extends BaseTester<PassageVector> {
 			result = result * calculateNaiveBaesianProbability(featureValue, i, possibleAuthorName);
 		}
 		
-		return result * ((Trainer) getTrainer()).probabilityOfAuthor(possibleAuthorName);
+		return result * ((MergedTrainer) getTrainer()).probabilityOfAuthor(possibleAuthorName);
 	}
 
 	private double calculateNaiveBaesianProbability(double featureValue ,int featureIndex, String possibleAuthorName){
-		double standartDeviation = ((Trainer) getTrainer()).getStandartDeviation(possibleAuthorName, featureIndex);
-		double mean = ((Trainer) getTrainer()).getMean(possibleAuthorName, featureIndex);
+		double standartDeviation = ((MergedTrainer) getTrainer()).getStandartDeviation(possibleAuthorName, featureIndex);
+		double mean = ((MergedTrainer) getTrainer()).getMean(possibleAuthorName, featureIndex);
 		
 		double firstPart = 1 / (Math.sqrt(2 * Math.PI * Math.pow(standartDeviation, 2)));
 		double secondPart = Math.pow(Math.E, (-1 * Math.pow(featureValue - mean, 2)) / (2 * Math.pow(standartDeviation, 2)) );

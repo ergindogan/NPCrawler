@@ -59,7 +59,11 @@ public class PassageReader extends BaseReader{
 					}
 					passage.setPassage(myPassageString);
 					
-					if(myPassageString.isEmpty() || myPassageString.contains("Read timed out") 
+					if(myPassageString.equals(" ")){
+						System.out.println("NAN POS!");
+					}
+					
+					if(myPassageString.trim().isEmpty() || myPassageString.contains("Read timed out") 
 							|| myPassageString.contains("HTTP error fetching URL") 
 							|| myPassageString.contains("Yazi alinamadi.")){
 						myRecord = "";

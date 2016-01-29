@@ -36,7 +36,7 @@ public class PipelineMerged {
 		features.add(new AvarageParagraphLengthFeature());
 		features.add(new PunctuationCountFeature());
 		features.add(new VocublaryExtendFeature());
-		features.add(new AvarageWordLengthFeature(true));
+		features.add(new AvarageWordLengthFeature(false));
 		features.add(new SentenceLengthAsWordCountFeature());
 		
 		//Load nominal words...

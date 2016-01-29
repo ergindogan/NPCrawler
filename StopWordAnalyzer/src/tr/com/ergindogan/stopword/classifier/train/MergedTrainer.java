@@ -1,6 +1,7 @@
 package tr.com.ergindogan.stopword.classifier.train;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,10 @@ public class MergedTrainer extends BaseTrainer {
 		setAuthorPassageVectorMap(authorPassageVectorMap);
 		setFeatures(features);
 		setNominalWordMap(nominalWordMap);
+		
+		setNominalTrainMatrix(new HashMap<String, NominalVector>());
+		setMeanVector(new HashMap<String, Vector<Double>>());
+		setStandartDeviationVector(new HashMap<String, Vector<Double>>());
 	}
 	
 	@Override
@@ -121,5 +126,30 @@ public class MergedTrainer extends BaseTrainer {
 			Map<String, Vector<Double>> standartDeviationVector) {
 		this.standartDeviationVector = standartDeviationVector;
 	}
+	
+	public double getMean(String authorName, int featureIndex){
+		return getMeanVector().get(authorName).get(featureIndex);
+	}
+	
+	public double getStandartDeviation(String authorName, int featureIndex){
+		return getStandartDeviationVector().get(authorName).get(featureIndex);
+	}
+	
+	private int getTotalVectors(String authorName){
+		return getAuthorPassageVectorMap().get(authorName).size();
+	}
 
+	private double getTotalVectors(){
+		double counter = 0;
+		
+		for(String authorName : getAuthorPassageVectorMap().keySet()){
+			counter = counter + getAuthorPassageVectorMap().get(authorName).size();
+		}
+		
+		return counter;
+	}
+
+	public double probabilityOfAuthor(String authorName){
+		return getTotalVectors(authorName) / getTotalVectors();
+	}
 }

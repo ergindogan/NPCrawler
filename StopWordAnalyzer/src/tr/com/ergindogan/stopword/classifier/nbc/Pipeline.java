@@ -26,7 +26,7 @@ public class Pipeline {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		File folderToLoad = new File("/Users/ergindoganyildiz/Desktop/withParagraphs");
+		File folderToLoad = new File("/Users/ergindoganyildiz/Desktop/withParagraphs/safe");
 		
 		//Load data...
 		DistinctAuthorLoader loader = new DistinctAuthorLoader(folderToLoad);
@@ -51,7 +51,7 @@ public class Pipeline {
 		features.add(new AvarageParagraphLengthFeature());
 		features.add(new PunctuationCountFeature());
 		features.add(new VocublaryExtendFeature());
-		features.add(new AvarageWordLengthFeature(true));
+		features.add(new AvarageWordLengthFeature(false));
 		features.add(new SentenceLengthAsWordCountFeature());
 //		features.add(new WordCountFeature());
 		
