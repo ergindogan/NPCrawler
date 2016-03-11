@@ -27,9 +27,10 @@ public class PipelineMerged {
 		//Load data...
 		DistinctAuthorLoader loader = new DistinctAuthorLoader(folderToLoad);
 		
-		Map<String,List<Passage>> myMap = loader.loadAndSelectQualifiedAuthors(CrossValidationType._90_10, 200, -1, true, -1);
+		Map<String,List<Passage>> myMap = loader.loadAndSelectQualifiedAuthors(CrossValidationType._90_10, 200, -1, true, 50);
 		
 		System.out.println(myMap.keySet().size() + " authors to test.");
+		printAuthorAndPassageCounts(myMap);
 		
 		//Select features
 		List<Feature> features = new ArrayList<Feature>();
@@ -47,4 +48,9 @@ public class PipelineMerged {
 		myClassifier.classify();
 	}
 
+	private static void printAuthorAndPassageCounts(Map<String,List<Passage>> myMap){
+		for(String authorName:myMap.keySet()){
+			System.out.println("Author : " + authorName + " Passage Count : " + myMap.get(authorName).size());
+		}
+	}
 }
