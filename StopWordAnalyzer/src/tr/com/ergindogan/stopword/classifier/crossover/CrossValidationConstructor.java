@@ -139,6 +139,7 @@ public class CrossValidationConstructor {
 			setPickedForTesting(item);
 			testItems.add(tempIndexList.get(randomNumber));
 			
+			tempIndexList.remove(randomNumber);
 		}
 		
 		return testItems;

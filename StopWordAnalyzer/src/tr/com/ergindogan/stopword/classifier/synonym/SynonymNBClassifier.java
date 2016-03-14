@@ -120,6 +120,7 @@ public class SynonymNBClassifier extends BaseClassifier{
 				if(!passage.getPassage().isEmpty()){
 					SynonymVector synonymVector = new SynonymVector(getSynonymSetMap(), passage.getPassage());
 					tempFeatureList.add(synonymVector);
+//					printVector(authorName, passage.getTitle(), synonymVector);
 				}
 			}
 			synonymVectorMap.put(authorName, tempFeatureList);
@@ -142,4 +143,7 @@ public class SynonymNBClassifier extends BaseClassifier{
 		this.synonymSetMap = synonymSetMap;
 	}
 	
+//	private void printVector(String authorName, String passageTitle, SynonymVector vector){
+//		System.out.println("Author Name : " + authorName + " Title : " + passageTitle + " Vector Sum : " + vector.getVectorSum());
+//	}
 }

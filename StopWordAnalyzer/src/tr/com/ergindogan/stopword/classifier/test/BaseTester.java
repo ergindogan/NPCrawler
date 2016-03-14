@@ -56,9 +56,15 @@ public abstract class BaseTester<T> implements Testable<T>{
 		double highestProbability = -1;
 		
 		for(String authorName : probabilityMap.keySet()){
-			double probability = probabilityMap.get(authorName);
-			if(probability > highestProbability){
-				highestProbability = probability;
+			highestProbabilityAuthorName = authorName;
+			highestProbability = probabilityMap.get(authorName);
+			break;
+		}
+		
+		for(String authorName : probabilityMap.keySet()){
+
+			if(probabilityMap.get(authorName) > highestProbability){
+				highestProbability = probabilityMap.get(authorName);
 				highestProbabilityAuthorName = authorName;
 			}
 		}

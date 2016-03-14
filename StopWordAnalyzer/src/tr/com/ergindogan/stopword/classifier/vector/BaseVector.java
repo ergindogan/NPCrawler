@@ -35,6 +35,14 @@ public abstract class BaseVector {
 		return vectorString.substring(0,vectorString.length() - 1) + "]";
 	}
 	
+	public double getVectorSum(){
+		double sum = 0.0;
+		for(int i = 0; i < getVector().size(); i++){
+			sum = sum + getVector().get(i);
+		}
+		return sum;
+	}
+	
 	protected static String getVectorString(Vector<Double> vec){
 		String vectorString = "[";
 		for(int i = 0; i < vec.size(); i++){

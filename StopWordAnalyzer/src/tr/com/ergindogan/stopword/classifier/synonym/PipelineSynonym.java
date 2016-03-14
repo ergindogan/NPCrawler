@@ -21,7 +21,11 @@ public class PipelineSynonym {
 		//Load data...
 		DistinctAuthorLoader loader = new DistinctAuthorLoader(folderToLoad);
 		
-		Map<String,List<Passage>> myMap = loader.loadAndSelectQualifiedAuthors(CrossValidationType._90_10, 200, -1, true, -1);
+		Map<String,List<Passage>> myMap = loader.loadAndSelectQualifiedAuthors(CrossValidationType._90_10, 20, -1, true, 2);
+		
+		for(String authorName : myMap.keySet()){
+			System.out.println(authorName + " : " + myMap.get(authorName).size());
+		}
 		
 		System.out.println(myMap.keySet().size() + " authors to test.");
 		
