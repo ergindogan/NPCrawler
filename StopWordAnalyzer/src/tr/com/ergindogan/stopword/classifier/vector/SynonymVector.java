@@ -4,11 +4,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Vector;
 
+import WordNet.Literal;
 import tr.com.ergindogan.stopword.classifier.feature.Feature;
 
 public class SynonymVector extends BaseVector {
 	
-	public SynonymVector(LinkedHashMap<String, String> synsetMap){
+	public SynonymVector(LinkedHashMap<String, List<Literal>> synsetMap){
 		setVector(new Vector<Double>(synsetMap.size()));
 		
 		for(int i = 1; i < synsetMap.size() + 1; i++){
@@ -16,9 +17,9 @@ public class SynonymVector extends BaseVector {
 		}
 	}
 	
-	public SynonymVector(LinkedHashMap<String, String> synsetMap, String passage){
-		String myString;
-		String meanings[];
+	public SynonymVector(LinkedHashMap<String, List<Literal>> synsetMap, String passage){
+		List<Literal> literals;
+		String meaning;
 		
 		setVector(new Vector<Double>(synsetMap.size()));
 		
@@ -32,10 +33,10 @@ public class SynonymVector extends BaseVector {
 
 		for(String word:words){
 			for(String key:synsetMap.keySet()){
-				myString = synsetMap.get(key);
-				meanings = myString.split(",");
+				literals = synsetMap.get(key);
 				
-				for(String meaning:meanings){
+				for(Literal literal:literals){
+					meaning = literal.getName();
 					if(meaning.equals(word)){
 						tempsynSetMap.put(key, tempsynSetMap.get(key) + 1);
 					}

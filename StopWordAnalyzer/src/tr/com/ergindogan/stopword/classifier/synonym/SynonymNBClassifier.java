@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import WordNet.Literal;
 import tr.com.ergindogan.stopword.classifier.BaseClassifier;
 import tr.com.ergindogan.stopword.classifier.crossover.CrossValidationConstructor;
 import tr.com.ergindogan.stopword.classifier.crossover.Iteration;
@@ -18,9 +19,9 @@ import tr.com.ergindogan.stopword.reader.passage.Passage;
 public class SynonymNBClassifier extends BaseClassifier{
 	
 	private Map<String,List<SynonymVector>> synonymVectorsToClassify;
-	private LinkedHashMap<String, String> synonymSetMap;
+	private LinkedHashMap<String, List<Literal>> synonymSetMap;
 	
-	public SynonymNBClassifier(Map<String,List<Passage>> myMap, LinkedHashMap<String, String> synonymSetMap, int trainRatio, int testRatio){
+	public SynonymNBClassifier(Map<String,List<Passage>> myMap, LinkedHashMap<String, List<Literal>> synonymSetMap, int trainRatio, int testRatio){
 		super(trainRatio, testRatio, new TestResult());
 		setSynonymSetMap(synonymSetMap);
 		setSynonymVectorsToClassify(myMap);
@@ -120,7 +121,7 @@ public class SynonymNBClassifier extends BaseClassifier{
 				if(!passage.getPassage().isEmpty()){
 					SynonymVector synonymVector = new SynonymVector(getSynonymSetMap(), passage.getPassage());
 					tempFeatureList.add(synonymVector);
-//					printVector(authorName, passage.getTitle(), synonymVector);
+					printVector(authorName, passage.getTitle(), synonymVector);
 				}
 			}
 			synonymVectorMap.put(authorName, tempFeatureList);
@@ -135,15 +136,15 @@ public class SynonymNBClassifier extends BaseClassifier{
 		return synonymVectorMap;
 	}
 
-	public LinkedHashMap<String, String> getSynonymSetMap() {
+	public LinkedHashMap<String, List<Literal>> getSynonymSetMap() {
 		return synonymSetMap;
 	}
 
-	public void setSynonymSetMap(LinkedHashMap<String, String> synonymSetMap) {
+	public void setSynonymSetMap(LinkedHashMap<String, List<Literal>> synonymSetMap) {
 		this.synonymSetMap = synonymSetMap;
 	}
 	
-//	private void printVector(String authorName, String passageTitle, SynonymVector vector){
-//		System.out.println("Author Name : " + authorName + " Title : " + passageTitle + " Vector Sum : " + vector.getVectorSum());
-//	}
+	private void printVector(String authorName, String passageTitle, SynonymVector vector){
+		System.out.println("Author Name : " + authorName + " Title : " + passageTitle + " Vector Sum : " + vector.getVectorSum());
+	}
 }

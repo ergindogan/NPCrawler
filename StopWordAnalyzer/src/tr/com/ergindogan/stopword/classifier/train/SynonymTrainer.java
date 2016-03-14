@@ -6,15 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 import tr.com.ergindogan.stopword.classifier.vector.SynonymVector;
+import WordNet.Literal;
 
 public class SynonymTrainer extends BaseTrainer {
 	
-	private LinkedHashMap<String, String> mySynonymMap;
+	private LinkedHashMap<String, List<Literal>> mySynonymMap;
 	private Map<String, List<SynonymVector>> synonymVectorsToClassify;
 	
 	private Map<String, SynonymVector> trainMatrix;
 	
-	public SynonymTrainer(Map<String,List<SynonymVector>> synonymVectorsToClassify, LinkedHashMap<String, String> mySynonymMap){
+	public SynonymTrainer(Map<String,List<SynonymVector>> synonymVectorsToClassify, LinkedHashMap<String, List<Literal>> mySynonymMap){
 		setSynonymVectorsToClassify(synonymVectorsToClassify);
 		setMySynonymMap(mySynonymMap);
 		setTrainMatrix(new HashMap<String, SynonymVector>());
@@ -35,11 +36,11 @@ public class SynonymTrainer extends BaseTrainer {
 		}
 	}
 
-	public LinkedHashMap<String, String> getMySynonymMap() {
+	public LinkedHashMap<String, List<Literal>> getMySynonymMap() {
 		return mySynonymMap;
 	}
 
-	public void setMySynonymMap(LinkedHashMap<String, String> mySynonymMap) {
+	public void setMySynonymMap(LinkedHashMap<String, List<Literal>> mySynonymMap) {
 		this.mySynonymMap = mySynonymMap;
 	}
 

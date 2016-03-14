@@ -10,6 +10,7 @@ import tr.com.ergindogan.stopword.classifier.crossover.CrossValidationType;
 import tr.com.ergindogan.stopword.loader.DistinctAuthorLoader;
 import tr.com.ergindogan.stopword.reader.passage.Passage;
 import Dictionary.Pos;
+import WordNet.Literal;
 import WordNet.SynSet;
 import WordNet.WordNet;
 
@@ -31,11 +32,11 @@ public class PipelineSynonym {
 		
 		WordNet wordNet = new WordNet("/Users/ergindoganyildiz/Downloads/balkanet.xml", new Locale("tr"));
 		
-		LinkedHashMap<String, String> synonymSetMap = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, List<Literal>> synonymSetMap = new LinkedHashMap<String, List<Literal>>();
 		
 		for(SynSet ss:wordNet.getSynSets()){
 			if(ss.getPos().equals(Pos.NOUN)){
-				synonymSetMap.put(ss.getId(), ss.getSynonym().getLiteralString());
+				synonymSetMap.put(ss.getId(), ss.getSynonym().getLiterals());
 			}
 		}
 		
