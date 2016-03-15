@@ -7,41 +7,49 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import Corpus.Sentence;
-import Corpus.TurkishSplitter;
 import tr.com.ergindogan.stopword.classifier.crossover.CrossValidationConstructor;
 import tr.com.ergindogan.stopword.classifier.crossover.Iteration;
 import tr.com.ergindogan.stopword.classifier.feature.Feature;
-import tr.com.ergindogan.stopword.classifier.test.MergedTester;
+import tr.com.ergindogan.stopword.classifier.test.MergedTesterAll;
 import tr.com.ergindogan.stopword.classifier.test.TestResult;
-import tr.com.ergindogan.stopword.classifier.train.MergedTrainer;
+import tr.com.ergindogan.stopword.classifier.train.MergedTrainerAll;
 import tr.com.ergindogan.stopword.classifier.vector.FeatureVector;
 import tr.com.ergindogan.stopword.classifier.vector.NominalVector;
 import tr.com.ergindogan.stopword.classifier.vector.PassageVector;
+import tr.com.ergindogan.stopword.classifier.vector.SynonymVector;
 import tr.com.ergindogan.stopword.reader.passage.Passage;
 import zemberek.morphology.ambiguity.Z3MarkovModelDisambiguator;
 import zemberek.morphology.apps.TurkishMorphParser;
 import zemberek.morphology.apps.TurkishSentenceParser;
 import zemberek.morphology.parser.SentenceMorphParse;
+import Corpus.Sentence;
+import Corpus.TurkishSplitter;
+import WordNet.Literal;
 
-public class ClassifierMerged extends BaseClassifier{
+public class ClassifierMergedAll extends BaseClassifier{
 	
 	private Map<String,List<PassageVector>> passageVectorsToClassify;
+	
 	private LinkedHashMap<String, Integer> nominalWordMap;
 	private List<Feature> features;
+	
+	private LinkedHashMap<String, List<Literal>> synonymSetMap;
+	private LinkedHashMap<String, List<String>> synDic;
 	
 	private static TurkishMorphParser morphParser;
 	private static Z3MarkovModelDisambiguator disambiguator;
 	private static TurkishSentenceParser sentenceParser;
 	private static TurkishSplitter ts;
 	
-	public ClassifierMerged(Map<String,List<Passage>> myMap, 
-			List<Feature> features, LinkedHashMap<String, Integer> nominalWordMap, int trainRatio, int testRatio){
+	public ClassifierMergedAll(Map<String,List<Passage>> myMap, 
+			List<Feature> features, LinkedHashMap<String, Integer> nominalWordMap,
+			LinkedHashMap<String, List<Literal>> synonymSetMap, LinkedHashMap<String, List<String>> synDic, int trainRatio, int testRatio){
 		super(trainRatio, testRatio, new TestResult());
+		setSynonymSetMap(synonymSetMap);
+		setSynDic(synDic);
 		setFeatures(features);
 		setNominalWordMap(nominalWordMap);
 		setPassageVectorsToClassify(myMap);
-		
 	}
 	
 	static{
@@ -105,11 +113,11 @@ public class ClassifierMerged extends BaseClassifier{
 			}
 			
 			//train the trainMap
-			MergedTrainer mergedTrainer = new MergedTrainer(trainMap, getFeatures(), getNominalWordMap());
+			MergedTrainerAll mergedTrainer = new MergedTrainerAll(trainMap, getFeatures(), getNominalWordMap(), getSynonymSetMap());
 			mergedTrainer.train();
 			
 			//test the testMap
-			MergedTester mergedTester = new MergedTester(testMap, mergedTrainer);
+			MergedTesterAll mergedTester = new MergedTesterAll(testMap, mergedTrainer);
 			result = mergedTester.test();
 			
 			//add mid results to the final result.
@@ -148,9 +156,26 @@ public class ClassifierMerged extends BaseClassifier{
 		this.features = features;
 	}
 	
+	public LinkedHashMap<String, List<Literal>> getSynonymSetMap() {
+		return synonymSetMap;
+	}
+
+	public void setSynonymSetMap(LinkedHashMap<String, List<Literal>> synonymSetMap) {
+		this.synonymSetMap = synonymSetMap;
+	}
+
+	public LinkedHashMap<String, List<String>> getSynDic() {
+		return synDic;
+	}
+
+	public void setSynDic(LinkedHashMap<String, List<String>> synDic) {
+		this.synDic = synDic;
+	}
+
 	private Map<String,List<PassageVector>> extractVectors(Map<String,List<Passage>> myMap, 
 			List<Feature> features, LinkedHashMap<String, Integer> myWordMap){
 		System.out.println("Vector Extraction Started!");
+		String passageString = "";
 		long startTime = System.currentTimeMillis();
 		
 		Map<String,List<PassageVector>> passageVectorMap = new HashMap<String,List<PassageVector>>();
@@ -164,11 +189,14 @@ public class ClassifierMerged extends BaseClassifier{
 			for(Passage passage : passages){
 				if(!passage.getPassage().isEmpty()){
 					FeatureVector featureVector = new FeatureVector(features, passage.getPassage(), passage.getParagraphs());
-					NominalVector nominalVector = new NominalVector(getNominalWordMap(), getRootWordPassage(passage.getPassage()));
+					passageString = getRootWordPassage(passage.getPassage());
+					NominalVector nominalVector = new NominalVector(getNominalWordMap(), passageString);
+					SynonymVector synonymVector = new SynonymVector(getSynDic(), getSynonymSetMap(), passageString);
 					
 					passageVector = new PassageVector();
 					passageVector.addToRepresentationList(featureVector);
 					passageVector.addToRepresentationList(nominalVector);
+					passageVector.addToRepresentationList(synonymVector);
 					
 					tempPassageVectorList.add(passageVector);
 				}

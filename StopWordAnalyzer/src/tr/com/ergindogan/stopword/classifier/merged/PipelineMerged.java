@@ -1,4 +1,4 @@
-package tr.com.ergindogan.stopword.classifier;
+package tr.com.ergindogan.stopword.classifier.merged;
 
 import java.io.File;
 import java.util.ArrayList;
