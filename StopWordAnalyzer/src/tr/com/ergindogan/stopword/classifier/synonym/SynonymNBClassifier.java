@@ -19,10 +19,15 @@ import tr.com.ergindogan.stopword.reader.passage.Passage;
 public class SynonymNBClassifier extends BaseClassifier{
 	
 	private Map<String,List<SynonymVector>> synonymVectorsToClassify;
-	private LinkedHashMap<String, List<Literal>> synonymSetMap;
 	
-	public SynonymNBClassifier(Map<String,List<Passage>> myMap, LinkedHashMap<String, List<Literal>> synonymSetMap, int trainRatio, int testRatio){
+	private LinkedHashMap<String, List<Literal>> synonymSetMap;
+	private LinkedHashMap<String, List<String>> synDic;
+	
+	public SynonymNBClassifier(Map<String,List<Passage>> myMap, 
+			LinkedHashMap<String, List<Literal>> synonymSetMap, LinkedHashMap<String, List<String>> synDic, 
+			int trainRatio, int testRatio){
 		super(trainRatio, testRatio, new TestResult());
+		setSynDic(synDic);
 		setSynonymSetMap(synonymSetMap);
 		setSynonymVectorsToClassify(myMap);
 	}
@@ -119,9 +124,9 @@ public class SynonymNBClassifier extends BaseClassifier{
 			
 			for(Passage passage : passages){
 				if(!passage.getPassage().isEmpty()){
-					SynonymVector synonymVector = new SynonymVector(getSynonymSetMap(), passage.getPassage());
+					SynonymVector synonymVector = new SynonymVector(getSynDic(), getSynonymSetMap(), passage.getPassage());
 					tempFeatureList.add(synonymVector);
-					printVector(authorName, passage.getTitle(), synonymVector);
+//					printVector(authorName, passage.getTitle(), synonymVector);
 				}
 			}
 			synonymVectorMap.put(authorName, tempFeatureList);
@@ -144,7 +149,15 @@ public class SynonymNBClassifier extends BaseClassifier{
 		this.synonymSetMap = synonymSetMap;
 	}
 	
-	private void printVector(String authorName, String passageTitle, SynonymVector vector){
-		System.out.println("Author Name : " + authorName + " Title : " + passageTitle + " Vector Sum : " + vector.getVectorSum());
+//	private void printVector(String authorName, String passageTitle, SynonymVector vector){
+//		System.out.println("Author Name : " + authorName + " Title : " + passageTitle + " Vector Sum : " + vector.getVectorSum());
+//	}
+
+	public LinkedHashMap<String, List<String>> getSynDic() {
+		return synDic;
+	}
+
+	public void setSynDic(LinkedHashMap<String, List<String>> synDic) {
+		this.synDic = synDic;
 	}
 }

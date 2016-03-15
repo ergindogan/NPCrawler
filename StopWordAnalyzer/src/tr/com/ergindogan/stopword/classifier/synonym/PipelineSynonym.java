@@ -1,6 +1,7 @@
 package tr.com.ergindogan.stopword.classifier.synonym;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -22,7 +23,7 @@ public class PipelineSynonym {
 		//Load data...
 		DistinctAuthorLoader loader = new DistinctAuthorLoader(folderToLoad);
 		
-		Map<String,List<Passage>> myMap = loader.loadAndSelectQualifiedAuthors(CrossValidationType._90_10, 20, -1, true, 2);
+		Map<String,List<Passage>> myMap = loader.loadAndSelectQualifiedAuthors(CrossValidationType._90_10, 200, -1, true, 30);
 		
 		for(String authorName : myMap.keySet()){
 			System.out.println(authorName + " : " + myMap.get(authorName).size());
@@ -34,14 +35,32 @@ public class PipelineSynonym {
 		
 		LinkedHashMap<String, List<Literal>> synonymSetMap = new LinkedHashMap<String, List<Literal>>();
 		
+		LinkedHashMap<String, List<String>> synDic = new LinkedHashMap<String, List<String>>();
+		
+		//Construct lookup synset dictionary and synsetMap
 		for(SynSet ss:wordNet.getSynSets()){
 			if(ss.getPos().equals(Pos.NOUN)){
-				synonymSetMap.put(ss.getId(), ss.getSynonym().getLiterals());
+				List<Literal> literals = ss.getSynonym().getLiterals();
+				synonymSetMap.put(ss.getId(), literals);
+				
+				for(Literal literal:literals){
+					String meaning = literal.getName();
+					List<String> ids = synDic.get(meaning);
+					
+					if(ids == null){
+						ids = new ArrayList<String>();
+					}
+					
+					ids.add(ss.getId());
+					synDic.put(meaning, ids);
+					
+				}
+				
 			}
 		}
 		
 		//Classify...
-		SynonymNBClassifier myClassifier = new SynonymNBClassifier(myMap, synonymSetMap, 90, 10);
+		SynonymNBClassifier myClassifier = new SynonymNBClassifier(myMap, synonymSetMap, synDic, 90, 10);
 		myClassifier.classify();
 		
 	}

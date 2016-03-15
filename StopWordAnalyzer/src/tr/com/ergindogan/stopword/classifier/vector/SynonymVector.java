@@ -1,11 +1,12 @@
 package tr.com.ergindogan.stopword.classifier.vector;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Vector;
 
-import WordNet.Literal;
 import tr.com.ergindogan.stopword.classifier.feature.Feature;
+import WordNet.Literal;
 
 public class SynonymVector extends BaseVector {
 	
@@ -17,9 +18,9 @@ public class SynonymVector extends BaseVector {
 		}
 	}
 	
-	public SynonymVector(LinkedHashMap<String, List<Literal>> synsetMap, String passage){
-		List<Literal> literals;
-		String meaning;
+	public SynonymVector(LinkedHashMap<String, List<String>> synDic, LinkedHashMap<String, List<Literal>> synsetMap, String passage){
+		List<String> ids = new ArrayList<String>();
+//		String meaning;
 		
 		setVector(new Vector<Double>(synsetMap.size()));
 		
@@ -32,13 +33,11 @@ public class SynonymVector extends BaseVector {
 		}
 
 		for(String word:words){
-			for(String key:synsetMap.keySet()){
-				literals = synsetMap.get(key);
-				
-				for(Literal literal:literals){
-					meaning = literal.getName();
-					if(meaning.equals(word)){
-						tempsynSetMap.put(key, tempsynSetMap.get(key) + 1);
+			if(word != null && !word.isEmpty()){
+				ids = synDic.get(word);
+				if(ids != null && !ids.isEmpty()){
+					for(String id:ids){
+						tempsynSetMap.put(id, tempsynSetMap.get(id) + 1);
 					}
 				}
 			}
