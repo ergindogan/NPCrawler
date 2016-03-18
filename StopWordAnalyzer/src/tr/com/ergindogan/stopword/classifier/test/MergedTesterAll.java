@@ -1,5 +1,6 @@
 package tr.com.ergindogan.stopword.classifier.test;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class MergedTesterAll extends BaseTester<PassageVector> {
 				for(String possibleAuthorName: ((MergedTrainerAll) getTrainer()).getAuthorPassageVectorMap().keySet()){
 					//vector un possibleAuthorName yazar a ait olma olasiligini hesaplayacagiz. 
 					//Bu olasiliklari probabilityMap icine koyacaz.
-					double probability = calculateProbability(passageVector, possibleAuthorName);
+					double probability = calculateProbabilityLog(passageVector, possibleAuthorName);
 					probabilityMap.put(possibleAuthorName, probability);
 				}
 				
@@ -82,6 +83,26 @@ public class MergedTesterAll extends BaseTester<PassageVector> {
 			}else{
 				SynonymVector synVec = (SynonymVector) vec;
 				finalProbability = finalProbability * Math.pow(Math.E, calculateSynonymTestProb(synVec, possibleAuthorName));
+			}
+		}
+		return finalProbability;
+	}
+	
+	private double calculateProbabilityLog(PassageVector vector, String possibleAuthorName){
+		double finalProbability = 0;
+		
+		List<BaseVector> vectorRepresentations = vector.getVectorRepresentations();
+		
+		for(BaseVector vec:vectorRepresentations){
+			if(vec instanceof FeatureVector){
+				FeatureVector myFV = (FeatureVector) vec;
+				finalProbability += Math.log(calculateNBTestProb(myFV, possibleAuthorName));
+			}else if(vec instanceof NominalVector){
+				NominalVector myNV = (NominalVector) vec;
+				finalProbability += calculateNominalTestProb(myNV, possibleAuthorName);
+			}else{
+				SynonymVector synVec = (SynonymVector) vec;
+				finalProbability += calculateSynonymTestProb(synVec, possibleAuthorName);
 			}
 		}
 		return finalProbability;

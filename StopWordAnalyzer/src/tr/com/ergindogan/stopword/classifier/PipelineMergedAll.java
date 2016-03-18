@@ -32,7 +32,7 @@ public class PipelineMergedAll {
 		//Load data...
 		DistinctAuthorLoader loader = new DistinctAuthorLoader(folderToLoad);
 		
-		Map<String,List<Passage>> myMap = loader.loadAndSelectQualifiedAuthors(CrossValidationType._90_10, 200, -1, true, 50);
+		Map<String,List<Passage>> myMap = loader.loadAndSelectQualifiedAuthors(CrossValidationType._90_10, 20, -1, true, 5);
 		
 		System.out.println(myMap.keySet().size() + " authors to test.");
 		printAuthorAndPassageCounts(myMap);
