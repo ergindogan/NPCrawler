@@ -62,8 +62,8 @@ public class NewsPaperLoader extends BaseReader{
 		System.out.println("Load Finished!");
 		
 		long totalTime = endTime - startTime;
-		System.out.println("It took " + totalTime + " miliseconds to load " + humanReadableByteCount(folderSize(getFileToRead()), true) + " of data.");
-		System.out.println("Number of total passages read : " + getTotalPassageCount(dataMap));
+		System.out.println("It took " + totalTime + " miliseconds to load " + /*humanReadableByteCount(folderSize(getFileToRead()), true) +*/ " of data.");
+//		System.out.println("Number of total passages read : " + getTotalPassageCount(dataMap));
 		
 		return dataMap;
 	}

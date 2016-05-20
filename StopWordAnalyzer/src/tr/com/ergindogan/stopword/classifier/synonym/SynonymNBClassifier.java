@@ -13,6 +13,7 @@ import tr.com.ergindogan.stopword.classifier.crossover.Iteration;
 import tr.com.ergindogan.stopword.classifier.test.SynonymTester;
 import tr.com.ergindogan.stopword.classifier.test.TestResult;
 import tr.com.ergindogan.stopword.classifier.train.SynonymTrainer;
+import tr.com.ergindogan.stopword.classifier.vector.BaseVector;
 import tr.com.ergindogan.stopword.classifier.vector.SynonymVector;
 import tr.com.ergindogan.stopword.reader.passage.Passage;
 
@@ -134,6 +135,9 @@ public class SynonymNBClassifier extends BaseClassifier{
 		
 		long endTime   = System.currentTimeMillis();
 		System.out.println("Synonym Feature Extraction Finished!");
+		
+		System.out.println("Found : " + BaseVector.foundSynsetCount);
+		System.out.println("Not Found : " + BaseVector.notFoundSynsetCount);
 		
 		long totalTime = endTime - startTime;
 		System.out.println("It took " + totalTime + " miliseconds to extract synonym features.");

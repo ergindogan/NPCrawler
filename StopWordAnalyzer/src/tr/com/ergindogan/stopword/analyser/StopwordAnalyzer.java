@@ -39,7 +39,7 @@ public class StopwordAnalyzer {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		File folderToLoad = new File("/Users/ergindoganyildiz/Desktop/withParagraphs/koklerine_ayrilmis");
+		File folderToLoad = new File("/Users/ergindoganyildiz/Desktop/withParagraphs/window_size_and_padding");
 		
 		NewsPaperLoader loader = new NewsPaperLoader(folderToLoad);
 		Map<NewsPaper,Map<String,List<Passage>>> myMap = loader.loadData(true);

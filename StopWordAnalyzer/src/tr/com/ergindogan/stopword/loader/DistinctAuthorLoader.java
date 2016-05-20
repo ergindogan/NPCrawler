@@ -48,7 +48,7 @@ public class DistinctAuthorLoader extends BaseReader {
 		
 		for(String authorName : distinctAuthorMap.keySet()){
 			List<Passage> passages = distinctAuthorMap.get(authorName);
-			if(passages.size() >= dividor && passages.size() > minPassageCount){
+			if(passages.size() >= dividor && passages.size() >= minPassageCount){
 				int passagesToSelect = passages.size() - (passages.size() % dividor);
 				if(topPassageCount > 0 && topPassageCount % 10 == 0 && passagesToSelect >= topPassageCount){
 					passagesToSelect = topPassageCount;
@@ -85,6 +85,10 @@ public class DistinctAuthorLoader extends BaseReader {
 				break;
 			}
 		}
+		// y Authors with min x passages loaded. Authors can have z amount of passages at the most.
+		System.out.println(yazarSayisi + " authors with min : " + minPassageCount + " passages loaded. Authors can have " + topPassageCount + " passages at the most.");
+//		System.out.println("Total : " + qualifiedAuthorMap.keySet().size() + " authors loaded to classify with passages between (" + minPassageCount + "," + topPassageCount + ") and authorSizePar : " + yazarSayisi);
+		printTotalPassageCount(qualifiedAuthorMap);
 		
 		return qualifiedAuthorMap;
 	}
@@ -126,6 +130,16 @@ public class DistinctAuthorLoader extends BaseReader {
 		
 		return distinctAuthorMap;
 		
+	}
+	
+	private void printTotalPassageCount(Map<String,List<Passage>> qualifiedAuthorMap){
+		int counter = 0;
+		
+		for(String authorName:qualifiedAuthorMap.keySet()){
+			counter += qualifiedAuthorMap.get(authorName).size();
+		}
+		
+		System.out.println(qualifiedAuthorMap.size() + " authos and " + counter + " passages loaded.");
 	}
 
 }

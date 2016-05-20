@@ -23,7 +23,7 @@ public class PipelineSynonym {
 		//Load data...
 		DistinctAuthorLoader loader = new DistinctAuthorLoader(folderToLoad);
 		
-		Map<String,List<Passage>> myMap = loader.loadAndSelectQualifiedAuthors(CrossValidationType._90_10, 200, -1, true, 30);
+		Map<String,List<Passage>> myMap = loader.loadAndSelectQualifiedAuthors(CrossValidationType._90_10, 310, 120, true, 2);
 		
 		for(String authorName : myMap.keySet()){
 			System.out.println(authorName + " : " + myMap.get(authorName).size());
@@ -34,6 +34,8 @@ public class PipelineSynonym {
 		WordNet wordNet = new WordNet("/Users/ergindoganyildiz/Downloads/balkanet.xml", new Locale("tr"));
 		
 		LinkedHashMap<String, List<Literal>> synonymSetMap = new LinkedHashMap<String, List<Literal>>();
+		
+		
 		
 		LinkedHashMap<String, List<String>> synDic = new LinkedHashMap<String, List<String>>();
 		
@@ -58,6 +60,11 @@ public class PipelineSynonym {
 				
 			}
 		}
+		
+		System.out.println("Synset size : " + synonymSetMap.size());
+		
+		System.out.println(synDic.get("baba"));
+		System.out.println(synDic.get("peder"));
 		
 		//Classify...
 		SynonymNBClassifier myClassifier = new SynonymNBClassifier(myMap, synonymSetMap, synDic, 90, 10);

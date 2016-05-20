@@ -18,7 +18,7 @@ public class PipelineNominal {
 		//Load data...
 		DistinctAuthorLoader loader = new DistinctAuthorLoader(folderToLoad);
 		
-		Map<String,List<Passage>> myMap = loader.loadAndSelectQualifiedAuthors(CrossValidationType._90_10, 200, -1, true, -1);
+		Map<String,List<Passage>> myMap = loader.loadAndSelectQualifiedAuthors(CrossValidationType._90_10, 310, 120, true, -1);
 		
 		System.out.println(myMap.keySet().size() + " authors to test.");
 		
@@ -26,7 +26,7 @@ public class PipelineNominal {
 				+ "koklerine_ayrilmis/wordFrequency.txt");
 		
 		StopWordReader stopWordReader = new StopWordReader(myFrequencyFile);
-		LinkedHashMap<String, Integer> myWordMap = stopWordReader.readFileToMap(190,30);
+		LinkedHashMap<String, Integer> myWordMap = stopWordReader.readFileToMap(500,125);
 		
 		//Classify...
 		NominalNBClassifier myClassifier = new NominalNBClassifier(myMap, myWordMap, 90, 10);

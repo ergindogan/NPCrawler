@@ -39,6 +39,9 @@ public class SynonymVector extends BaseVector {
 					for(String id:ids){
 						tempsynSetMap.put(id, tempsynSetMap.get(id) + 1);
 					}
+					foundSynsetCount++;
+				}else{
+					notFoundSynsetCount++;
 				}
 			}
 		}

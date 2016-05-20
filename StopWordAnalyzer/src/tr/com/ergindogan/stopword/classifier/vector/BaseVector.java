@@ -3,6 +3,9 @@ package tr.com.ergindogan.stopword.classifier.vector;
 import java.util.Vector;
 
 public abstract class BaseVector {
+	
+	public static double foundSynsetCount = 0;
+	public static double notFoundSynsetCount = 0;
 
 	private Vector<Double> vector;
 

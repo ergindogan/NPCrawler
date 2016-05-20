@@ -18,6 +18,7 @@ import tr.com.ergindogan.stopword.classifier.feature.Feature;
 import tr.com.ergindogan.stopword.classifier.feature.PunctuationCountFeature;
 import tr.com.ergindogan.stopword.classifier.feature.SentenceLengthAsWordCountFeature;
 import tr.com.ergindogan.stopword.classifier.feature.VocublaryExtendFeature;
+import tr.com.ergindogan.stopword.classifier.feature.WordCountFeature;
 import tr.com.ergindogan.stopword.loader.DistinctAuthorLoader;
 import tr.com.ergindogan.stopword.reader.passage.Passage;
 import tr.com.ergindogan.stopword.reader.stopword.StopWordReader;
@@ -32,8 +33,8 @@ public class PipelineMergedAll {
 		//Load data...
 		DistinctAuthorLoader loader = new DistinctAuthorLoader(folderToLoad);
 		
-		Map<String,List<Passage>> myMap = loader.loadAndSelectQualifiedAuthors(CrossValidationType._90_10, 20, -1, true, 5);
-		
+		Map<String,List<Passage>> myMap = loader.loadAndSelectQualifiedAuthors(CrossValidationType._90_10, 310, 120, true, 20);
+	
 		System.out.println(myMap.keySet().size() + " authors to test.");
 		printAuthorAndPassageCounts(myMap);
 		
@@ -44,10 +45,11 @@ public class PipelineMergedAll {
 		features.add(new VocublaryExtendFeature());
 		features.add(new AvarageWordLengthFeature(false));
 		features.add(new SentenceLengthAsWordCountFeature());
+		features.add(new WordCountFeature());
 		
 		//Load nominal words...
 		StopWordReader stopWordReader = new StopWordReader(myFrequencyFile);
-		LinkedHashMap<String, Integer> nominalWordsMap = stopWordReader.readFileToMap(190,30);
+		LinkedHashMap<String, Integer> nominalWordsMap = stopWordReader.readFileToMap(500,125);
 		
 		WordNet wordNet = new WordNet("/Users/ergindoganyildiz/Downloads/balkanet.xml", new Locale("tr"));
 		
