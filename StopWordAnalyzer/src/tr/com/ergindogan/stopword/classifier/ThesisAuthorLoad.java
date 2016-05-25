@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import opennlp.tools.util.eval.Mean;
+//import opennlp.tools.util.eval.Mean;
 import tr.com.ergindogan.stopword.classifier.crossover.CrossValidationType;
 import tr.com.ergindogan.stopword.classifier.feature.AvarageParagraphLengthFeature;
 import tr.com.ergindogan.stopword.classifier.feature.AvarageWordLengthFeature;
